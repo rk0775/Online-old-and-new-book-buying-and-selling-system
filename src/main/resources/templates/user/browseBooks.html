@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="user/userPage::layout(~{::section})">
+<head>
+<meta charset="UTF-8" />
+<title>Document</title>
+</head>
+<body>
+	<section>
+		<div class="mt-2 p-3 ">
+			<h5 class="text-muted my-2">Browse Available Books</h5>
+			<div class="fullDivider"></div>
+
+			<nav class="navbar navbar-expand-lg navbar-light">
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item active"><a class="nav-link" th:href="@{/user/browseBooks/all,0}">All
+						</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/user/browseBooks/english,0}">English</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/user/browseBooks/marathi,0}">Marathi</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/user/browseBooks/hindi,0}">Hindi</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/user/browseBooks/gujrati,0}">Gujrati</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/user/browseBooks/jerman,0}">Jerman</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/user/browseBooks/spanish,0}">Spanish</a></li>
+					</ul>
+					<form class="form-inline my-2 my-lg-0">
+						<div class="input-group mb-2">
+							<input type="text" id="searchField" name="sbname" class="form-control rounded-input"
+								 placeholder="Username">
+							<div class="input-group-append">
+								<div th:attr="onclick=|searchBook('${currentPage}')|" class="input-group-text bg-dyellow pointer"
+									style="border-radius: 25px;">
+									<i class=" fa fa-search"></i>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</nav>
+
+
+
+			<div class="row ">
+				<div th:each="book : ${books} "
+					th:with="dprice=${ (book.bookPrice-((book.bookPrice * book.bookDiscount)/100)) }"
+					class="col-6 col-sm-4 col-md-3 col-mp">
+					<div class="browseBookCard">
+						<div class="discount text-center">
+							<p class="text-light off-text "> <b> <span th:text=${book.bookDiscount+'%'}></span><br/> <small class="text-small m-up-5">OFF</small></b></p>
+						</div>
+						<img class="pointer" th:attr="onclick=|clickOnBook('${book.bookId}')|"
+							th:src="@{'/image/webContent/BookCoverImages/'+${book.bookCover}}"
+							alt="Cover not fount :{" />
+						<div class="mt-2 mb-1">
+									<b class="text-dark" th:text="${book.bookTitle}">Warewolf
+										Mountain</b><span class="to-right"><i
+										class="fa-solid fa-star text-primary "></i>&nbsp; <span
+										class="text-primary"
+										th:text="${h.getRating(book)}"></span>
+									</span>
+								</div>
+
+						<small 	th:attr="onclick=|clickOnBook('${book.bookId}')|" class="text-small pointer m-up-10  text-muted"
+							th:text="${book.bookAuthor}"></small><br />
+							 <!-- <small
+							class="m-up-5 "><i class="fa fa-star text-dyellow"></i><i
+							class="fa fa-star text-dyellow"></i><i
+							class="fa fa-star text-dyellow"></i><i
+							class="fa fa-star text-dyellow"></i></small> -->
+							<div class="bookBuyFooter d-flex  m-up-10">
+								<p class="text-success text-size-20"><b th:text="${dprice }" >  Price : 120 </b><i class="mx-2 fa-solid fa-indian-rupee-sign"></i><small class="text-danger mx-2"><del th:text="${book.bookPrice}" >150</del><i class="mx-2 fa-solid fa-indian-rupee-sign text-small"></i></small></p>
+								<i 	th:attr="onclick=|addToCart('${book.bookId}','${book.bookTitle}','${dprice}')|"  class=" pointer fa-solid fa-cart-plus to-right text-muted "></i>
+								
+							</div>
+							
+					</div>
+				</div>
+			</div>
+
+			<div th:if="${totalPage==0}" class="my-5 text-center">
+				<img th:src="@{/image/webImg/noData.png}" style="width:50%;height:auto" alt=" Data Not Present Yet!!  " />
+			</div>
+			<div th:if="${totalPage!=0}" class=" pt-3">
+				<nav aria-label="Page navigation example ">
+					<ul class="pagination justify-content-end">
+						<li th:classappend="${ currentPage == 0 ?'disabled':'enabled' }"
+							class="page-item"><a class="page-link"
+							th:href="@{'/user/browseBooks/'+${action}+','+${currentPage-1} }" tabindex="-1">Previous</a></li>
+						<li th:each="i : ${#numbers.sequence(1,totalPage)}"
+							class="page-item text-dark"><a class="page-link text-dark"
+							th:classappend="${ i==currentPage+1 }?'bg-dyellow' : ''"
+							th:href="@{'/user/browseBooks/'+${action}+','+${i-1} }"><span
+								th:text="${i}"></span></a></li>
+						<li class="page-item"
+							th:classappend="${ currentPage+1 == totalPage } ?'disabled':'enabled' ">
+							<a class="page-link"
+							th:href="@{'/user/browseBooks/'+${action}+','+${currentPage+1} }">Next</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+
+		</div>
+
+		<script>
+			function clickOnBook(id) {
+				window.location.assign("/bookInfo/" + id);
+			}
+			
+			function searchBook(page){
+				var key=$("#searchField").val();
+				if(key!=''){
+					window.location.assign("/user/searchBookByName/"+page+"/"+key);
+				}
+			}
+			
+		</script>
+		
+		
+
+	</section>
+</body>
+</html>

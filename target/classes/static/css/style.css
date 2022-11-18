@@ -1,0 +1,819 @@
+/*the light yellow color code*/
+:root {
+  --fyellow: #ffe996;
+  --dyellow: #fecc0f;
+  --blue:#1151fe;
+  --fwhite:#faf8f5;
+}
+
+.bg-fyellow{
+	background-color: var(--fyellow);
+	
+}
+
+/* custome scrollbar*/
+::-webkit-scrollbar{
+    width:0.625rem;
+}
+::-webkit-scrollbar-track{
+    background:var(--fyellow);
+}
+::-webkit-scrollbar-thumb{
+    background:var(--dyellow);
+}
+/*
+@media screen and (min-width: 1200px) {
+    
+
+}*/
+
+/*the dark yellow color code*/
+.bg-dyellow{
+	background-color: var(--dyellow);
+}
+.bg-blue{
+	background-color: var(--blue);	
+}
+.bg-fwhite{
+	background-color: var(--fwhite);	
+}
+.pointer{
+	cursor:pointer;
+}
+/*navbar buttons disign*/
+.radius-50{
+	border-radius: 50%;
+}
+.title-700{
+	font-family: 'Merienda', cursive;
+}
+.boybg{
+	background: url("../image/webImg/background.png");
+	background-repeat:no-repeat;
+	background-size:cover;
+	width:100%;
+	height:120vh;
+}
+
+.border-none{
+	border: none;
+	outline-color: none !important;
+}
+.search-btn {
+	width:33px;
+	height: 33px;
+	background-color: var(--fyellow);
+}
+#signup-btn {
+	width:90px;
+	height:33px;
+	border-radius: 25px;
+}
+.search-btn:focus {
+	background-color: var(--fyellow);
+}
+/*-----------------------------------------*/
+
+/* the blue box on the header banner background  */
+.background-infoBlue{
+	position:absolute;
+	top: 570px;
+	right:10%;
+	left:10%;
+	height:150px;
+	background-color: blue;
+	border-radius:30px 30px 0 0;
+	padding-top:30px 0px 50px 0px;
+}
+.blbtn{
+	width:66px;
+	height: 66px;
+	border-radius: 50%;
+}
+/*
+@media screen and (min-width: 1200px) {
+ 
+
+}
+/*-------------------------------*/
+
+/*  slider of top page two books */
+
+.vertical-slidbar{
+	position:absolute;
+	right:5%;
+	top:11%;
+	width:25%;
+}
+@media screen and (min-width: 1200px) {
+    
+	.vertical-slidbar{
+		position:absolute;
+		right:5%;
+		top:11%;
+		width:20%;
+	}
+}
+.nextbtn{
+	position:absolute;
+	left:95%;
+	bottom:-7%;
+	color:var(--fyellow);;
+}
+.prevbtn{
+	position:absolute;
+	rigth:95%;
+	bottom:-7%;
+	color:var(--fyellow);;
+}
+
+.book-block{
+background-color:var(--fyellow);;
+margin-top:50px;
+height:180px;
+width:75%;
+border-radius:50% 50% 15px 15px;	
+}
+.imgBlock{
+width:105px;
+height:105px;
+margin-top:-25px;	
+	
+}
+.carousel-inner{
+  height: 80%;
+}
+/*---------------------------------------------*/
+
+/* backCoverText Disign */
+
+.backCoverText{
+	width:35%;
+	height:55vh;
+	padding-left:35px;
+	padding-top: 17%;
+}
+.BigText{
+	margin-top:10px;
+	font-size: 53px;
+}
+.info{
+	font-family:cursive;
+}
+.rounded-btn{
+	border-radius: 30px;
+}
+.btn-shadow{
+	box-shadow: 0.5px 3px 5px #666666;
+}
+.btn-shadow:hover{
+	box-shadow: 1px 1px 2px #666666;
+}
+/**************************************BOY BG END***********************************/
+.girlbg{
+
+	background: url("../image/webImg/bg2.png") no-repeat  center;
+	background-size: cover;
+	width:100%;
+	height:100vh;
+	background-size:100%;
+}
+.specificationInfo{
+	position:relative;
+	left:10%;
+	top:27%;
+	width:31%;
+	height: 400px;
+}
+.small-divider{
+	margin:10px;
+	width:80px;
+	height: 4px;
+	background-color: blue;
+	border-radius:5px;
+}
+.text-small{
+	font-size: 12px;
+}
+.btn-rounded-div{
+	width:42px;
+	height: 42px;
+	border-radius: 50%;
+	background-color: white;
+	border:1px 1px 1px white;
+	text-align: center;
+	
+}
+.btn-rounded-div-big{
+	width:52px;
+	height: 52px;
+	border-radius: 50%;
+	background-color: white;
+	border:1px 1px 1px white;
+	text-align: center;
+	
+}
+.font-small{
+	font-size: 20px;
+	margin-top:25%;
+}
+.font-big{
+	font-size: 25px;
+	margin-top:25%;
+}
+
+/******************************Girg bg end******************************/
+
+/*Yellow bg*/
+.yellowbg{
+	
+	background: url("../image/webImg/yellowBg.png") no-repeat center;
+	background-size:cover;
+	width:100%;
+	height:105vh;
+	background-size:100%;
+}
+.yellowBookBlock{
+	
+	width:95%;
+	height:50vh;
+	border-radius: 50% 50% 25px 25px;
+	background-color:  #ffe996;
+	margin-top:30%;
+}
+.yellowimg{
+	max-width: 80% !important;
+	height: 70%;
+	position: relative;
+	top: -20%;
+	right: 10%;
+	left: 10%;
+	
+}
+.yellowBookInfo{
+	position: absolute;
+	bottom:0%;
+	width:100%;
+	padding:6%;
+}
+.ystar{
+	width:100%;
+}
+.ystar span{
+	position: absolute;
+	right: 10%;
+}
+.ystar i{
+	margin:2px;
+}
+.bg-gray{
+	background-color:#c0c0c0;
+}
+
+/********************************************************/
+/* how can we help block disign */
+.helpBlock{
+	width:100%;
+	height:70vh;
+	background-color: var(--fwhite);
+}
+
+/*************************************************/
+/* BookCatlog */
+.bookCatalog{
+	width:100%;
+	height:90vh;
+	background-color: var(--fwhite);
+}
+.bookcard{
+	width:99%;
+	height:415px;
+	background-color: white;
+	border-radius: 15px;
+	padding:6%;
+}
+.to-right{
+	position: absolute;
+	right: 10%;
+}
+.bookcardImg{
+	width:100%;
+	height: 1050px;
+	border:3%;
+}
+.bookcardinfo{
+	width:100%;
+	position: absolute;
+	bottom: -2%;
+}
+/*************************************************************/
+/*feed back*/
+.feedback{
+	width:100%;
+	height:95vh;
+	background-color: var(--fwhite);
+	padding-top:50px;
+}
+.feedbackImg{
+	width:45%;
+	height:55%;
+	border-radius:10%;
+}
+.feedbackImg img{
+	box-sizing:border-box;
+	width:390px;
+	height: 420px;
+	border-radius: 10%;
+}
+.feedbackText{
+	width:65%;
+	height:68%;
+	background-color: white;
+	position:absolute;
+	bottom: 10%;
+	right:0%;
+	border-radius: 25px;
+}
+
+/*********************************************************************/
+/*footer*/
+.footer{
+	width:100%;
+	height:63vh;
+	padding-top:75px;
+	margin-top:100px;
+	background-color: black;
+}
+.our-rights{
+	width:90%;
+	height:10%;
+	position: relative
+	bottom: 10%;
+	background-color: white;
+}
+/******************************************************************/
+/*user pagr*/
+.sidebar{
+	width:17%;
+	height:200vh;
+	position:fixed;
+}
+.userBoard{
+	width:83%;
+
+	position:absolute;
+	right:0px;
+	background-color: var(--fwhite);
+}
+/* add a beutifull divider small img */
+.fullDivider{
+	width:100%;
+	height:1px;
+	background-color: #beb474;
+	box-shadow: 1px 3px 5px #80773c;
+}
+.sidebar-options{
+	padding: 0px;
+	text-decoration: none;
+}
+.sidebar-options li{
+	font-size: 15px;
+}
+.browseBookCard{
+	width:100%;
+	height:325px;
+	padding:15px;
+	margin-top:7%;
+	background-color: #ffffff;
+}
+.browseBookCard img{
+	width:100%;
+	height:31vh;
+	border-radius: 10px;
+}
+@media screen and (min-width: 1200px) {
+    
+	.browseBookCard{
+		width:100%;
+		height:47vh;
+		padding:15px;
+		margin-top:7%;
+		background-color: white;
+	}
+	.browseBookCard img{
+		width:90%;
+		padding:0 5px 0 10px;
+		height:35vh;
+		border-radius: 10px;
+	}
+
+}
+
+.m-up-20{
+	position:relative;
+	top:-20px;
+}
+.m-up-10{
+	position:relative;
+	top:-10px;
+}
+.m-up-5{
+	position:relative;
+	top:-6px;
+}
+.col-mp{
+	padding-right: 5px;
+padding-left: 5px;
+}
+.sidebarHover:hover{
+	background-color: var(--dyellow);
+	
+}
+.rounded-input{
+	border-radius:25px;
+	border: none;
+}
+.rounded-input:focus{
+	box-shadow: none;
+}
+
+.slim-navbar{
+	height:35px;
+}
+.userNameBtn{
+	width:8%;
+	border:none;
+	box-shadow: none;
+	list-style: none;
+	text-decoration: none;
+	color:gray;
+	padding-left:5px;
+}
+.text-dyellow{
+	color:var(--dyellow);
+}
+
+/***************************************************/
+/* login register page */
+.loiginCard{
+	background-color:white;
+	border-radius:20px;
+	margin-top: 50px;
+	padding:10%;
+}
+.registerCard{
+	background-color:white;
+	border-radius:20px;	
+	margin-top: 20px;
+	padding:7%;
+}
+.nav-link{
+	outline: none;
+	color:gray;
+}
+.nav-link:hover{
+	outline: none;
+	color:gray;
+}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
+background-color:var(--fwhite);
+color:black;
+outline:none;
+border:none;
+border-bottom: 3px solid var(--fyellow);
+}
+.box-shadow-none:focus{
+	border:1px solid var(--fyellow);
+	box-shadow: none;
+}
+.bookBanner{
+	padding-top:70px;
+	background-image: url("../image/webImg/yellowbg.png");
+	width:100%;
+	height:35vh;
+	background-size: cover;
+}
+.bookCover{
+	margin:8%;
+	width:60%;
+	height: 42vh;
+}
+.singleBookInfo{
+	margin-top:7%;
+}
+row-manage{
+	position:relative;
+	bottom: 0px;
+}
+/*also like book card */
+.alsolikebookcard{
+	width:100%;
+	height:230px;
+	background-color: white;
+	padding:3%;
+}
+.alsolikebookcardImg{
+	width:100%;
+	height: 450px;
+	border:3%;
+}
+.alsolikebookcardinfo{
+	width:100%;
+	position: absolute;
+	bottom: 3px;
+}
+.px-10{
+	padding-right:10%;
+	padding-left: 10%;
+}
+/*****************************************************/
+.addBookCard{
+	margin-top: 30px;
+	padding:5% 10% 2% 10%;
+	
+}
+.active{
+	background-color: red !imporatant;
+}
+/*******************************************************/
+.offer-card{
+	margin:2%;
+	height:45vh;
+	padding: 35px;
+	background-color: white;
+	border-radius: 20px; 
+	
+}
+.hide{
+	display:none !important;
+}
+
+.mt-10{
+	margin-top: 10%;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+.wrapper {
+    max-width: 900px;
+    margin: auto
+}
+
+.wrapper .row {
+    padding: 0;
+    --bs-gutter-x: var(--bs-gutter-x)
+}
+
+.progresses {
+    position: relative;
+    max-width: 70%;
+    margin: auto
+}
+
+.progresses ul {
+    list-style: none;
+    padding: 0
+}
+
+.progresses ul li {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    z-index: 200;
+    position: relative
+}
+
+.progresses ul li.blue {
+    color: #3268ff;
+    background-color: #3268ff
+}
+
+.progresses ul li::after {
+    position: absolute;
+    top: 35px;
+    left: -15px;
+    font-size: 0.8rem;
+    width: 90px
+}
+
+#step-1::after {
+    content: "Review order"
+}
+
+#step-2::after {
+    content: "Sign In";
+    left: -5px
+}
+
+#step-3::after {
+    content: "Payment"
+}
+
+.bottom{
+	position:absolute;
+	bottom: 0px;
+}
+
+
+.progresses .progress {
+    height: 0.7rem;
+    width: 100%;
+    top: 33px;
+    position: absolute;
+    background-color: #f0f0f0;
+    border-radius: 10px
+}
+
+.text-size-20{
+font-size: 14px;	
+}
+.discount{
+	position:absolute;
+	right:2px;
+	top:13px;
+	background-image: url("../image/webImg/discount.png");
+	background-size:cover;
+	width:53px;
+	height:53px;
+}
+
+@media screen and (min-width: 1200px) {
+	.discount{
+		position:absolute;
+		right:35px;
+		top:15px;
+		background-image: url("../image/webImg/discount.png");
+		background-size:cover;
+		width:53px;
+		height:53px;
+	}
+}
+.off-text{
+	font-size: 13px;
+	margin-top: 11px;
+}
+.mb-100{
+	margin-bottom: 15px;	
+}
+.searchDiv{
+	position:fixed;
+	top:0;
+	right:-15px;
+	z-index:99999999;
+	width:0px;
+	height:100%;
+	background-color: var(--fwhite);
+	border-top:18px solid #8080ff;
+	border-bottom:18px solid #8080ff;
+	transition:all .4s;
+}
+.loader{
+	position: fixed;
+	top:0;
+	left:0;
+	background-color: rgba(255,233,150,0.8);
+	height:100%;
+	width:100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index:99999;
+}
+
+.disppear{
+	animation:vanish 1s forwards;
+}
+
+@keyframes vanish{
+	100%{
+		opacity:0;
+		visibility: hidden;
+	}
+}
+.glass{
+	background: linear-gradient(135deg,rgba(255,233,150,0.3),rgba(255,233,150,1));
+	backdrop-filter:blur(10px);
+	-webkit-backdrop-filter:blur(10px);
+	border-radius:20px;
+	border:1px solid rgba(255,233,150,0.18);
+	box-shadow:0 8px 32px 0 rgba(0,0,0,0.37);
+}
+.glass-white{
+	background: linear-gradient(135deg,rgba(255,255,255,0.8),rgba(255,255,255,0.8));
+	backdrop-filter:blur(5px);
+	-webkit-backdrop-filter:blur(5px);
+	border-radius:20px;
+	border:1px solid rgba(255,233,150,0.18);
+	box-shadow:0 8px 32px 0 rgba(0,0,0,0.37);
+}
+.glass-white-noblur{
+	background: linear-gradient(135deg,rgba(255,255,255,0.8),rgba(255,255,255,0.8));	
+	border-radius:20px;
+	border:1px solid rgba(255,233,150,0.18);
+	box-shadow:0 2px 15px 0 rgba(0,0,0,0.37);
+}
+.scale{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:7vh;
+	background-color: var(--fyellow);
+}
+.dashImg{
+	background-color:var(--fwhite);
+	width:70%;
+	height:auto;
+	border-radius:50%;
+}
+.count-card{
+	background-color: white;
+	border-right:20px solid var(--fyellow);
+	width:45%;
+	margin: 2%;
+}
+
+
+
+
+
+
+
+
+
+/*  reset password  */
+
+                                	body {
+    background-position: center;
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #505050;
+    font-family: "Rubik",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.5;
+    text-transform: none;
+}
+
+.forgot{
+	    background-color: #fff;
+    padding: 12px;
+    border: 1px solid #dfdfdf;
+}
+
+.padding-bottom-3x {
+    padding-bottom: 72px !important;
+}
+
+.card-footer{
+	background-color: #fff;
+}
+
+.btn{ 
+
+	font-size: 13px;
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #76b7e9;
+    outline: 0;
+    box-shadow: 0 0 0 0px #28a745;
+}
+               
+.admin-drop{
+	left: -60px;
+}
+
+.modal-dialog{
+    height: 50%;
+    width: 50%;
+    margin:auto;
+}
+
+
+.modal-header{
+    color: white;
+    background-color:var(--fyellow);
+}
+
+
+
+
+.icon1{
+   color: var(--fyellow);
+
+}
+
+
+a{
+    margin: auto;
+}
+
+
+
+
+

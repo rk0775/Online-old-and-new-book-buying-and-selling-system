@@ -1,0 +1,25 @@
+.starrr {
+  display: inline-block; }
+  .starrr a {
+    font-size: 30px;
+    padding: 0 1px;
+    cursor: pointer;
+    color: #0080ff;
+    text-decoration: none; }
+.ratings{
+  display: inline-block; }
+  .ratings a {
+    font-size: 25px;
+    padding: 0 1px;
+    cursor: pointer;
+    color: #0080ff;
+    text-decoration: none; }
+    
+.rateStars{
+  display: inline-block; }
+.rateStars a {
+    font-size: 18px;
+    padding: 0 2px;
+    cursor: pointer;
+    color: #0080ff;
+    text-decoration: none; }

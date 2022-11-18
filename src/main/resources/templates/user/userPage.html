@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:fragment="layout(content)">
+<head>
+<meta charset="ISO-8859-1">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+	integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
+	crossorigin="anonymous">
+<link rel="stylesheet" th:href="@{/css/style.css}" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+	integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!--font style -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+	href="https://fonts.googleapis.com/css2?family=Merienda:wght@700&display=swap"
+	rel="stylesheet">
+<!-- Owl carousel -->
+<link rel="stylesheet" th:href="@{/files/owl/owl.carousel.min.css}">
+<link rel="stylesheet" th:href="@{/files/owl/owl.theme.default.min.css}">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+	integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script th:src="@{/js/script.js}"></script>
+<link rel="stylesheet" th:href="@{/files/alert/sweetalert2.min.css}" />
+<script th:src="@{/files/alert/sweetalert2.all.min.js}"></script>
+<script th:src="@{/files/alert/sweetalert2.min.js}"></script>
+<title th:text="${title}"></title>
+</head>
+<body class="bg-fwhite">
+	<div class="loader">
+		<i class="text-muted fa-solid fa-spin fa-3x fa-spinner"></i>
+	</div>
+
+
+	<nav
+		class="navbar fixed-top d-flex justify-content-between slim-navbar navbar-expand-lg navbar-light bg-fyellow ">
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse navbar-right"
+			id="navbarSupportedContent">
+			<ul class="nav navbar-nav navbar-right ml-auto ">
+				<li class="nav-item mx-1"><a class="nav-link text-dark"
+					th:href="@{/}">Home <span class="sr-only">(current)</span>
+				</a></li>
+			</ul>
+			<button onclick="openFunction()"
+				class=" btn form-control search-btn mr-sm-2 radius-50 bg-fyellow border-none p-0">
+				<i class=" fa fa-search"></i>
+			</button>
+			<i class="mx-4 fa fa-shopping-basket pointer" data-toggle="modal"
+				data-target="#cart"> <small class="text-small cart-num"></small></i>
+
+			<li class="nav-item dropdown userNameBtn text-dark mr-4"><a
+				class="dropdown-toggle text-dark" style="text-decoration: none"
+				href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+				aria-haspopup="true" aria-expanded="false"
+				th:text="${user.userName}"> </a>
+				<div class="dropdown-menu admin-drop"
+					aria-labelledby="navbarDropdown">
+
+					<a onclick="profile()" class="dropdown-item pointer"><img
+						alt="" style="width: 40px; height: 40px; border-radius: 50%"
+						th:src="@{'/image/webContent/userImages/'+${user.userPic} }"><span
+						class="ml-2">Profile</span></a>
+					<div class="dropdown-divider"></div>
+					<a onclick="logout()" class="dropdown-item pointer"><i
+						class="ml-2 fa-solid fa-right-from-bracket"></i> <span
+						class="ml-3">Logout</span></a>
+				</div></li>
+
+		</div>
+	</nav>
+	<!-- Modal -->
+	<div class="modal fade " id="cart" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Book Shopping
+						Cart</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body cart-body"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+					<a th:href="@{/user/chekout}" type="button"
+						class="checkout-btn btn btn-primary">Checkout</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="container-fluid">
+
+		<div class="row mt-4">
+			<div class="sidebar bg-fyellow ">
+				<div>
+					<div class="text-center m-up-10">
+					<a th:href="@{/user/addBookForm}"
+						class="btn bg-dyellow mt-5 mb-3 mx-3 px-3 py-2" style="font-size: 15px">+ ADD A BOOK</a>
+					</div>
+					<div class="fullDivider"></div>
+					<ul class="sidebar-options mt-3" style="list-style: none;">
+						<li class="sidebarHover px-3 py-1"><a
+							th:href="@{/user/browseBooks/all,0}" class="text-muted"
+							style="text-decoration: none"><i
+								class="  my-2 fa-solid fa-book-atlas"></i> &nbsp; Browse</a></li>
+						<li class="sidebarHover px-3 py-1"><a
+							th:href="@{/user/Buying_history}" class="text-muted"
+							style="text-decoration: none"><i
+								class="  my-2 fa-solid fa-cart-shopping"></i> &nbsp; Buy Book</a></li>
+						<li class="sidebarHover px-3 py-1"><a
+							th:href="@{/user/favorite_Books}" class="text-muted"
+							style="text-decoration: none"><i
+								class="  my-2 fa-solid fa-book-bookmark"></i> &nbsp; Favorite
+								Book</a></li>
+
+						<li class="sidebarHover px-3 py-1"><a
+							th:href="@{/user/myStore}" class="text-muted"
+							style="text-decoration: none"><i
+								class="  my-2 fa-solid fa-shop"></i>&nbsp; Register Store</a></li>
+						<li class="sidebarHover px-3 py-1"><a
+							th:href="@{/user/BuyOldBook/0}" class="text-muted"
+							style="text-decoration: none"><i
+								class="fa-solid fa-rectangle-list"></i>&nbsp; Buy Old Book</a></li>
+						<li class="sidebarHover px-3 py-1"><a
+							th:href="@{/user/myBooks/0}" class="text-muted"
+							style="text-decoration: none"><i class="fa-brands fa-sellsy"></i>&nbsp;
+								My Books </a></li>
+						<li class="sidebarHover px-3 py-1"><a
+							th:href="@{/user/myOrders}" class="text-muted"
+							style="text-decoration: none"><i
+								class="fa-solid fa-parachute-box"></i>&nbsp; My Orders </a></li>
+						<li class="sidebarHover px-3 py-1"><a
+							th:href="@{/user/profile}" class="text-muted"
+							style="text-decoration: none"><i class="fa-solid fa-id-card"></i>&nbsp;
+								Profile </a></li>
+						<!-- 	<li class="sidebarHover px-3 py-1"><a
+							th:href="@{/logout}" class="text-muted"
+							style="text-decoration: none"><i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;
+								Logout </a></li>
+ -->
+
+					</ul>
+					<div class="fullDivider"></div>
+					<ul class="sidebar-options mt-3" style="list-style: none;">
+						<li class=" px-3 py-1"><a href="" class="text-muted"
+							style="text-decoration: none"> <i
+								class="fa-solid text-small text-danger fa-circle"></i> &nbsp;
+								Most Diwali Tails
+						</a></li>
+						<li class=" px-3 py-1"><a href="" class="text-muted"
+							style="text-decoration: none"> <i
+								class="text-primary text-small fa-solid fa-circle"></i> &nbsp;
+								Classic Novels
+						</a></li>
+						<li class=" px-3 py-1"><a href="" class="text-muted"
+							style="text-decoration: none"> <i
+								class="fa-solid fa-circle text-small text-warning"></i> &nbsp;
+								Best Of List
+						</a></li>
+						<li class="px-3 py-1"><a href="" class="text-muted"
+							style="text-decoration: none"> <i
+								class="fa-solid fa-circle text-small text-success"></i> &nbsp;
+								Most Populer
+						</a></li>
+
+					</ul>
+					<div class="fullDivider"></div>
+				</div>
+			</div>
+
+
+			<!-- search div  -->
+
+
+			<div class="searchDiv" id="searchDiv">
+				<h1 class="closeSearch to-right mt-2 close"
+					onclick="closeFunction()">
+					<i class="fa-solid fa-xmark"></i>
+				</h1>
+				<div class="text-center mt-5">
+
+					<img style="width: 20%; height: auto;"
+						th:src="@{/image/webImg/searchBook.png}" alt="" />
+					<h3 class="text-muted p2-5 pb-4">
+						<b>Search Books Here...</b>
+					</h3>
+
+					<div class="row mb-4">
+						<div class="col-10 offset-1">
+							<form th:action="@{/doFindBook}" class="form text-left">
+								<div class="mb-4">
+									<small class="text-small text-muted mt-4">Search By
+										Book Name </small> <input type="text" name="bName"
+										placeholder="Ente The Search Book name" class="form-control" />
+								</div>
+								<div class="mb-4">
+									<small class=" text-small text-muted ">Search By Book
+										Auther Name </small> <input type="text" name="aName"
+										placeholder="Enter Book Auther name" class="form-control" />
+								</div>
+								<div class="row ">
+									<div class="col-6 mb-4">
+										<small class=" text-small text-muted ">Select Price
+											Criteria </small> <select class="form-control" name="price" id="">
+											<option value="all">All Books</option>
+											<option value="less 200">less than 200 rs</option>
+											<option value="bet 200 to 500">between 200 rs 500 rs</option>
+											<option value="greter 500">greter than 500 rs</option>
+
+										</select>
+									</div>
+
+
+									<div class="">
+										<small class="text-small text-muted mt-4">Choose Book
+											Categorys</small> <input name="categorys"
+											placeholder="Choose the Book categorys"
+											class="categoryInput form-control dropdown-toggle"
+											data-toggle="dropdown">
+
+										<ul class="dropdown-menu bg-light px-2">
+											<li><a href="#" class="small" data-value="Science"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Science
+													Fiction</a></li>
+											<li><a href="#" class="small" data-value="Adventure"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Adventure</a></li>
+											<li><a href="#" class="small" data-value="History"
+												tabIndex="-1"><input type="checkbox" />&nbsp;History</a></li>
+											<li><a href="#" class="small" data-value="Action"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Action</a></li>
+											<li><a href="#" class="small" data-value="Children's"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Children's</a></li>
+											<li><a href="#" class="small" data-value="Classic"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Classic </a></li>
+											<li><a href="#" class="small" data-value="Comic book"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Comic book</a></li>
+											<li><a href="#" class="small" data-value="Crime"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Crime</a></li>
+											<li><a href="#" class="small" data-value="Drama"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Drama</a></li>
+											<li><a href="#" class="small" data-value="Novel"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Novel</a></li>
+											<li><a href="#" class="small" data-value="Suspence"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Suspense
+													and Thrillers</a></li>
+											<li><a href="#" class="small"
+												data-value="Biographies and Autobiographies" tabIndex="-1"><input
+													type="checkbox" />&nbsp;Biographies and Autobiographies</a></li>
+											<li><a href="#" class="small" data-value="Cookbooks"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Cookbooks</a></li>
+
+											<li><a href="#" class="small" data-value="Coding"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Coding</a></li>
+										</ul>
+									</div>
+
+
+
+								</div>
+
+
+								<!-- bookType and language  -->
+								<div class="row mb-4">
+									<div class="col">
+										<small class=" text-small text-muted ">select book
+											language</small>
+										<div class="form-outline">
+											<select class="form-control" name="language" id="">
+												<option value="all">Any language</option>
+												<option value="english">English</option>
+												<option value="hindi">Hindi</option>
+												<option value="marathi">Marathi</option>
+												<option value="gujrati">Gujrati</option>
+												<option value="jerman">Jerman</option>
+												<option value="spanish">Spanish</option>
+											</select>
+										</div>
+									</div>
+									<div class="col">
+										<small class=" text-small text-muted ">select book
+											type</small>
+										<div class="form-outline">
+											<select class="form-control" name="type" id="">
+												<option value="all">Any Books</option>
+												<option value="new">New Book</option>
+												<option value="old">Old Book</option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="text-right">
+									<button type="submit" class="btn btn-warning">Find
+										Book</button>
+								</div>
+							</form>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+
+
+
+
+			<div class="userBoard">
+				<div th:replace="${content}"></div>
+			</div>
+
+		</div>
+
+	</div>
+
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+		crossorigin="anonymous"></script>
+	<script th:src="@{/files/owl/owl.carousel.min.js}"></script>
+
+	<script>
+		function logout() {
+			window.location.assign("/logout");
+		}
+		function profile() {
+			window.location.assign("http://localhost:9090/user/profile");
+		}
+
+		var options = [];
+
+		$('.dropdown-menu a')
+				.on(
+						'click',
+						function(event) {
+
+							var $target = $(event.currentTarget), val = $target
+									.attr('data-value'), $inp = $target
+									.find('input'), idx;
+
+							if ((idx = options.indexOf(val)) > -1) {
+								options.splice(idx, 1);
+								setTimeout(function() {
+									$inp.prop('checked', false)
+								}, 0);
+							} else {
+								options.push(val);
+								setTimeout(function() {
+									$inp.prop('checked', true)
+								}, 0);
+							}
+
+							$(event.target).blur();
+							console.log(options);
+							$(".categoryInput").val(options);
+
+							return false;
+						});
+
+		function closeFunction() {
+			document.getElementById("searchDiv").style.width = '0px';
+		}
+		function openFunction() {
+			document.getElementById("searchDiv").style.width = '49%';
+
+		}
+	</script>
+
+	<script>
+		var loader = document.querySelector(".loader")
+		window.addEventListener("load", vanish);
+
+		function vanish() {
+			loader.classList.add("disppear");
+		}
+	</script>
+</body>
+</html>

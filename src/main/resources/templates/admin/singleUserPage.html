@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="admin/AdminDashboard::layout(~{::section})">
+<head>
+<meta charset="UTF-8" />
+<title th:text="${title}"></title>
+</head>
+<body>
+	<section>
+
+		<div class="mt-2 p-3 ">
+			<h5 class="text-muted my-2" th:text="${u.userName}+' Profile'"></h5>
+			<div class="fullDivider"></div>
+			<div class="container">
+				<div class="mt-3 ml-5">
+					<a style="text-decoration: none;"
+						th:href="@{'/admin/users/'+${page}}"><i
+						class="text-muted  fa-solid fa-arrow-left"></i></a>
+				</div>
+
+				<div class="card mx-sm-5 my-2">
+
+					<div class="row my-4 py-3 ">
+
+						<div class="col-sm-5   text-center">
+							<img style="width: 70%; height: auto;"
+								th:src="@{'/image/webContent/userImages/'+${u.userPic }}"
+								alt="Picture not found!!" />
+							<h2 th:text="${u.userName}" class="text-Muted mt-3"></h2>
+						</div>
+						<div class="col-sm-5 ">
+							<table class="table borderless table-stripped">
+								<tr>
+									<td>Email :</td>
+									<td th:text="${u.userEmail}"></td>
+								</tr>
+								<tr>
+									<td>Contact :</td>
+									<td th:text="${u.userPhone}"></td>
+								</tr>
+								<tr>
+									<td>Password :</td>
+									<td>**********</td>
+								</tr>
+								<tr>
+									<td>District :</td>
+									<td th:text="${u.userDistrict}"></td>
+								</tr>
+								<tr>
+									<td>Pincode :</td>
+									<td th:text="${u.userPincode}"></td>
+								</tr>
+								<tr>
+									<td>Address :</td>
+									<td th:text="${u.userAddr}"></td>
+								</tr>
+
+							</table>
+
+						</div>
+					</div>
+					<div th:if="${u.bookStore!=null}">
+						<div class="row card offer-card" style="height: 34vh">
+							<div class="col-sm-4 text-center">
+								<img style="width: 80%; height: auto;"
+									th:src="@{'/image/webContent/storeImages/'+${u.bookStore.storePic}}"
+									alt="Server Error!!" />
+							</div>
+							<div class="col-sm-8">
+								<h4 class="text-dark" th:text="${u.bookStore.storeName}"></h4>
+								<h6 class="text-muted m-up-10"
+									th:text="${u.bookStore.owner.userName}"></h6>
+								<small class="text-muted"
+									th:text="${'Store Voucher End date : '+u.bookStore.enddate}"></small>
+								<p class="text-muted"
+									th:text="${'Address : '+u.bookStore.storeAddr}"></p>
+								<p class="text-muted m-up-10"
+									th:text="${'Store Discription : '+u.bookStore.storeDis}"></p>
+								<h6 class="m-up-10">
+									Pending Payment :&nbsp;<b class="text-success mx-2"
+										th:text="${u.bookStore.placeOrderPrice}"></b> <i
+										class=" text-success fa-solid fa-indian-rupee-sign"></i>
+								</h6>
+								<small class="text-success m-up-20"
+									th:text="${'Total Earnings : '+u.bookStore.totalEarnings}"></small>
+
+							</div>
+
+						</div>
+
+					</div>
+					<h5 class="text-muted my-3 mx-3" >User Books</h5>
+					<div class="mx-3">
+						<table class="table">
+						<thead class="bg-primary">
+							<tr>
+								<td>#BookID</td>
+								<td>Book Name</td>
+								<td>Book Price</td>
+								<td>Remaining Quntity</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="book : ${u.books} ">
+								<td th:text="${book.bookId}"></td>
+								<td th:text="${book.bookTitle}"></td>
+								<td th:text="${book.bookPrice}"></td>
+								<td th:text="${book.bookQuantity}"></td>
+							</tr>
+
+						</tbody>
+					</table>
+					</div>
+
+
+				</div>
+			</div>
+
+
+
+		</div>
+
+	</section>
+</body>
+</html>

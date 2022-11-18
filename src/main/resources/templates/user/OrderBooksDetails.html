@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="user/userPage::layout(~{::section})">
+<head>
+<meta charset="UTF-8" />
+<title>Document</title>
+</head>
+<body>
+	<section>
+		<div class="mt-2 p-3 ">
+			<h5 class="text-muted my-2">Specific book order details</h5>
+			<div class="fullDivider"></div>
+
+			<nav class="navbar navbar-expand-lg navbar-light">
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item active"><a class="nav-link" href="#">All
+						</a></li>
+						<li class="nav-item"><a class="nav-link" href="#">Most
+								Rated</a></li>
+						<li class="nav-item"><a class="nav-link" href="#">Most
+								Populer</a></li>
+					</ul>
+					<form class="form-inline my-2 my-lg-0">
+						<div class="input-group mb-2">
+							<input type="text" class="form-control rounded-input"
+								id="inlineFormInputGroup" placeholder="Username">
+							<div class="input-group-append">
+								<div class="input-group-text bg-dyellow pointer"
+									style="border-radius: 25px;">
+									<i class=" fa fa-search"></i>
+								</div>
+							</div>
+						</div>
+
+					</form>
+				</div>
+			</nav>
+
+			<div th:each="order : ${orders}" th:with="id=1" class="mt-3">
+				<div class="alert alert-warning">
+					<div class="row">
+						<div class="col-sm-3">
+							<img style="width: 90%; height: 200px;"
+								th:src="@{'/image/webContent/BookCoverImages/'+${order.getOrderedBooks().getBookCover()}}"
+								alt="Image not fount" />
+						</div>
+						<div class="col-sm-5">
+							<h5 class="" th:text="${order.getOrderedBooks().bookTitle}"></h5>
+							<small th:text="${order.getOrderedBooks().bookAuthor}"></small> <br>
+							<small class="text-small text-muted">Lorem ipsum dolor
+								sit amet, consectetur adipisicing elit. Aperiam id architecto
+								quibusdam.</small><br>
+							<small class="text-muted"><b>Quntity </b></small> <small
+								th:text="${order.bookQuantity}"></small>
+
+						</div>
+						<div class="col-sm-4">
+							
+							<h6>ADDRESS ?</h6>
+							<small>Lorem ipsum dolor sit amet, consectetur
+								adipisicing elit. Dolores tempora!</small>
+						
+								<div th:if="${order.orderStatus=='store'}"  class="text-right bottom">
+									<a th:href="@{'/user/placeOrder/'+${order.orderId}}"
+										class="btn btn-sm btn-outline-dark">Packed The Books
+										for Shipping</a>
+								</div>
+								<div th:if="${order.orderStatus=='cancel'}"  class="text-right bottom">
+									<small
+										class="alert text-danger">Book Buyer Cancel This Order</small>
+								</div>
+								<div th:if="${order.orderStatus=='admin-store'}"
+								class="text-right bottom">
+								<a th:href="@{'/user/placeOrder/'+${order.orderId}}"
+										class="btn btn-sm btn-outline-danger">Packed The Books
+										for Shipping</a>
+							</div>
+							<div th:if="${order.orderStatus=='packed'}"
+								class="text-right bottom">
+								<a th:href="@{'/user/placeOrder/'+${order.orderId}}"
+										class="btn btn-sm btn-outline-warning">Edit</a>
+								<a th:href="@{'/user/changeStatus/'+${order.orderId}}"
+										class="btn btn-sm btn-outline-dark">Hand Over The Book</a>		
+							</div>
+							<div th:if="${order.orderStatus=='delivered'}"
+								class="text-right bottom">
+								
+								<h6 class="text-success">Order Completed!!</h6>		
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			function clickOnBook(id) {
+				window.location.assign("/bookInfo/" + id);
+			}
+		</script>
+
+	</section>
+</body>
+</html>

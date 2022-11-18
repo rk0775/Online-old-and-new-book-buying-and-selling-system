@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="navbar::layout(~{::section})">
+<head>
+<meta charset="ISO-8859-1">
+</head>
+<body>
+	<section>
+		<div class="container-fluid p-0 mb-5 " style="height: 100vh">
+
+			<div class="bookBanner glass"
+				th:with="dprice=${ (book.bookPrice-( (book.bookPrice * book.bookDiscount)/ 100 ) )}">
+				<div class="d-flex " style="height: 35vh">
+					<div class="col-12 col-sm-5 text-center">
+						<img style="border-radius: 5px 15px 15px 5px" class="bookCover"
+							th:src="@{'/image/webContent/BookCoverImages/'+${book.bookCover}}"
+							alt="Cover not found" />
+
+					</div>
+					<div class="col-12 col-sm-6">
+						<div class="singleBookInfo">
+							<h1 class="text-muted">
+								<b th:text="${book.bookTitle}"></b>
+							</h1>
+							<h6 class="title-700 text-muted m-up-10">
+								<span th:text="${book.bookAuthor}"></span>
+							</h6>
+							<p class="m-up-10">
+								<span style="font-size: 25px" class="text-success"
+									th:text="${dprice}"></span><i style="font-size: 23px"
+									class="text-success mx-2 fa-solid fa-indian-rupee-sign"></i>
+								<del class="text-danger" style="font-size: 20px"
+									th:text="${book.bookPrice}"></del>
+								<i style="font-size: 18px"
+									class="text-danger mx-2 fa-solid fa-indian-rupee-sign"></i>
+							</p>
+							<div th:if="${ !book.bookRating.isEmpty() }" class="m-up-20 ratings"
+								th:attr="data-rating=|${totalRate / totalPerson}|"></div>
+						</div>
+					</div>
+				</div>
+				<div class="d-flex">
+					<div class="col-12 col-sm-5 ">
+						<div class="" style="padding: 110px 10px 5px 80px;">
+							<h6 class="text-muted">About book</h6>
+							<p class=" text-justify"
+								th:text="${strOp.getShortDescription(book.bookDescription,100) }"></p>
+
+							<div class="my-2 text-right">
+								<a th:each=" c : ${book.Category} "
+									th:href="@{'/doFindBook?bName=&aName=&price=all&categorys='+${c.categoryName}+'&language=all&type=all'}"
+									class="btn btn-outline-primary m-1 btn-sm"
+									th:text="${c.categoryName}"></a>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-sm-6">
+						<!-- <a class="btn  rounded-btn bg-fyellow text-dark px-4 mx-3">Buy
+							<span th:text="${book.bookPrice}"></span> <i
+							class="fa-solid fa-indian-rupee-sign"></i>
+						</a> -->
+						<button
+							th:attr="onclick=|addToCart('${book.bookId}','${book.bookTitle}','${dprice}')|"
+							class="btn rounded-btn btn-outline-success ">Add To Cart
+							+</button>
+						<button th:if="${!loginUser.equals('none') && loginUser.enabled}"
+							th:attr="onclick=|favoriteBook('${book.bookId}')|"
+							class="btn rounded-btn btn-outline-danger ">Add To Favorite <i
+							class=" ml-2 text-danger fa fa-heart"></i></button>
+						<div class="alsoLikeBlock mt-10 pt-3">
+							<h4 class="text-muted">You May Also Like</h4>
+
+							<div>
+								<div class="owl-carousel alsolikeBookCarousel owl-theme">
+
+									<div th:each="b : ${alsoLikeBookList} "
+										th:with="dprice=${ (b.bookPrice-( (b.bookPrice * b.bookDiscount)/ 100 ) )}"
+										class="alsolikebookcard ">
+										<div class="alsolikebookcardImg">
+											<img class="pointer"
+												th:attr="onclick=|clickOnBook('${b.bookId}')|"
+												th:src="@{'/image/webContent/BookCoverImages/'+${b.bookCover}}"
+												style="border-radius: 5%; height: 30% !important;" />
+										</div>
+										<div class="alsolikebookcardinfo">
+											<div class="">
+												<b class="text-dark" th:text="${b.bookTitle}"></b>
+											</div>
+											<small class="text-muted text-small"
+												th:text="${b.bookAuthor}"></small> </br> <span><small
+												style="font-size: 15px" class="text-success"
+												th:text="${dprice}"></small><i style="font-size: 15px"
+												class="text-success mx-2 fa-solid fa-indian-rupee-sign"></i>
+											<del style="font-size: 11px" class="text-danger"
+													th:text="${b.bookPrice}"></del><i style="font-size: 11px"
+												class="text-danger mx-2 fa-solid fa-indian-rupee-sign"></i></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+
+		<div th:if="${!loginUser.equals('none') && loginUser.enabled}" class="alert alert-success container" style="margin-top:80px;border-radius: 20px">
+			<div class="row">
+				<div class="col-sm-5 text-center">
+					<img style="width: 150px; height: 140px"
+						th:src="@{/image/webImg/starBook.png}" alt="" />
+				</div>
+				<div class="col-sm-7 pt-3">
+					<div class="rating text-center">
+						<h4>
+							<b>Give The rating For This Book</b>
+						</h4>
+						<div th:attr="data-id=| ${book.bookId} |" class="starrr"></div>
+					</div>
+					<div class="reveiw hide text-center" tabindex="0" id="id">
+						<p class="ratemsg text-muted"></p>
+						<p class="reviewmsg text-muted"></p>
+						<div class="bookReveiw">
+						<textarea class="bookReveiwTxt form-control" placeholder="Enter the book review"></textarea>
+						<div class="text-left text-danger"><small>please do not enter the personal information like your email and phone number or your address for privacy.</small></div>
+						<button th:attr="onclick=|storeReview('${book.bookId}')|" class="btn btn-block btn-success">Submit review</button>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+		
+		<div class="container" style="margin-top: 100px;margin-bottom: 50px" >
+		<div class="divider"></div>
+			<h4 class="my-5 text-muted">Book user reviews</h4>
+			<div th:each="br : ${book.getBookRating()}" th:if="${br.review!=null}" class="row my-4">
+				<div class="col-sm-5 text-center">
+					<img style="width:170px;height:170px;border-radius: 50%" th:src="@{'/image/webContent/userImages/'+${br.rateuser.userPic}}" alt="" class="mt-2" />
+				</div>
+				<div class="col-sm-7">
+				<i class="fa-solid fa-quote-left text-primary"></i>
+					<p class="ml-3 text-dark text-justify" th:text="${br.review}"></p>
+					<small th:text="${br.date}"></small><br />
+					<div class="ratings" th:attr="data-rating=|${br.bookRate}|"></div>
+					<h4 class="text-capitalize"><b th:text="${br.rateuser.userName}"></b></h4>
+				</div>
+			</div>
+		
+		</div>
+		
+		
+		<script>
+			$(function() {
+				$(".starrr")
+						.starrr()
+						.on(
+								"starrr:change",
+								function(event, value) {
+									var rate = value;
+									var bookId = $(this).attr("data-id");
+									$(".ratemsg")
+											.html(
+													"<i class='text-success fa-solid fa-check'></i> &nbsp;Your responce saved...")
+									$(".rating").addClass("hide");
+									$(".reveiw").removeClass("hide");
+									
+									$.ajax({
+										type : 'POST',
+										url : '/user/saveRatings',
+										data : JSON.stringify({
+											bid : bookId,
+											rate : rate
+										}),
+										dataType : 'json',
+										contentType : 'application/json',
+										cache : 'false',
+										processData : 'false',
+										success : function(response) {
+											window.scrollBy({
+												  top: 700,
+												  behavior: 'smooth',
+												});
+											console.log("save rating");
+										},
+									});
+									
+								});
+					
+				var rating = document.getElementsByClassName("ratings");
+				for (var a = 0; a < rating.length; a++) {
+					$(rating[a]).starrr({
+						readOnly : true,
+						rating : rating[a].getAttribute("data-rating")
+					});
+				}
+
+			});
+
+			function clickOnBook(id) {
+				window.location.assign("/bookInfo/" + id);
+			}
+			function storeReview(id){
+				var rev=$(".bookReveiwTxt").val();
+				$.ajax({
+					type : 'POST',
+					url : '/user/saveReview',
+					data : JSON.stringify({
+						bid : id,
+						review : rev
+					}),
+					dataType : 'json',
+					contentType : 'application/json',
+					cache : 'false',
+					processData : 'false',
+					success : function(response) {
+						$(".ratemsg").addClass("hide");
+						$(".bookReveiw").addClass("hide");
+						$(".reviewmsg")
+						.html(
+								"<i class='fa-solid fa-3x text-primary fa-face-grin-stars'></i><br><i class='text-success fa-solid fa-check'></i> &nbsp;Your review saved...<br> Thanks for your responce.")
+								console.log("save rating");
+					},
+				});
+			}
+			
+			function favoriteBook(bid){
+				$.ajax({
+					   type: 'post',
+					   url: '/user/addTofavorite/' + bid, //This line
+					   dataType: 'json',
+					   success:function(response){
+						   if(response.status=="present")
+							   swal.fire("Information","This book is alredy present in your favorite list","info");
+						   else
+							   swal.fire("Success","Book added to your favorite list successfully.","success");
+						   
+					   },
+					   error:function(response){
+						   
+						   swal.fire("something went wrong!!","book not added to your favorite list try later..","error");
+					   }
+					});
+			}
+		</script>
+	</section>
+</body>
+</html>

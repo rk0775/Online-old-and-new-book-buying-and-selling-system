@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="admin/AdminDashboard::layout(~{::section})">
+<head>
+<meta charset="UTF-8" />
+<title>Document</title>
+</head>
+<body>
+	<section>
+
+		<div class="mt-2 p-3 ">
+			<h5 class="text-muted my-2">All Books</h5>
+			<div class="fullDivider"></div>
+
+			<nav class="navbar navbar-expand-lg navbar-light">
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item active"><a class="nav-link"
+							th:href="@{/admin/books/all,0}">All</a></li>
+						<li class="nav-item"><a class="nav-link"
+							th:href="@{/admin/books/store,0}">Store books</a></li>
+						<li class="nav-item"><a class="nav-link"
+							th:href="@{/admin/books/user,0}">User books</a></li>
+						<li class="nav-item"><a class="nav-link"
+							th:href="@{/admin/books/check,0}">Check books</a></li>
+						<li class="nav-item"><a class="nav-link"
+							th:href="@{/admin/books/uncheck,0}">Uncheck books</a></li>	
+					</ul>
+					<form class="form-inline my-2 my-lg-0">
+						<div class="input-group mb-2">
+							<input type="text" class="bookId form-control rounded-input"
+								id="inlineFormInputGroup" placeholder="Enter book name">
+							<div class="input-group-append">
+								<div th:attr="onclick=|searchBook('${currentPage}')|" class="input-group-text bg-dyellow pointer"
+									style="border-radius: 25px;">
+									<i class=" fa fa-search"></i>
+								</div>
+							</div>
+						</div>
+
+					</form>
+				</div>
+			</nav>
+
+			<div class="mt-3 mx-3">
+				<table class=" table table-hover">
+					<thead>
+						<tr>
+							<th scope="col">#ID</th>
+							<th scope="col">Book Name</th>
+							<th scope="col">Book Owner</th>
+							<th scope="col">Price</th>
+							<th scope="col">Quantity</th>
+							<th scope="col">Best Books</th>
+
+						</tr>
+					</thead>
+					<tbody class="tbody">
+						<tr th:each="book : ${books}">
+							<th scope="col" th:text="${'ID2021'+book.bookId}"></th>
+							<th th:attr="onclick=|showBook('${book.bookId}')|" scope="col" th:text="${book.bookTitle}" class="pointer"></th>
+							<th scope="col" th:text="${book.seller.userName}">Store
+								Owner</th>
+							<th scope="col" class="text-success" ><span th:text="${book.bookPrice+''}"></span><i class="px-2 fa-solid fa-indian-rupee-sign"></i></th>
+							<th scope="col" th:text="${book.bookQuantity}">Contact</th>
+							<th scope="col">
+								<!-- Default switch -->
+								<div th:if="${book.seller.bookStore!=null}" class="custom-control custom-switch">
+								
+								<i th:if="${book.isBestOfYear==true}"  th:attr="onclick=|BestBookOfYear('${book.bookId}')|"  class="checkOp fa-2x text-success fa-solid fa-circle-check pointer"></i>
+								<i th:if="${book.isBestOfYear==false}" th:attr="onclick=|BestBookOfYear('${book.bookId}')|" class="checkOp fa-2x text-muted fa-solid fa-circle-xmark pointer"></i>	
+								</div>
+								<div th:if="${book.seller.bookStore==null}" class="custom-control custom-switch">
+									<i class= "message fa-2x text-muted fa-solid fa-circle pointer"></i>
+									
+								</div>
+							</th>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+			<div th:if="${totalPage!=0}" class="my-5">
+				<nav  th:if="${showPagination}"  aria-label="Page navigation example ">
+					<ul class="pagination justify-content-end">
+						<li th:classappend="${ currentPage == 0 ?'disabled':'enabled' }"
+							class="page-item"><a class="page-link"
+							th:href="@{'/admin/books/'+${action}+','+${currentPage-1} }" tabindex="-1">Previous</a></li>
+						<li th:each="i : ${#numbers.sequence(1,totalPage)}"
+							class="page-item text-dark"><a class="page-link text-dark"
+							th:classappend="${ i==currentPage+1 }?'bg-dyellow' : ''"
+							th:href="@{'/admin/books/'+${action}+','+${i-1} }"><span
+								th:text="${i}"></span></a></li>
+						<li class="page-item"
+							th:classappend="${ currentPage+1 == totalPage } ?'disabled':'enabled' ">
+							<a class="page-link"
+							th:href="@{'/admin/books/'+${action}+','+${currentPage+1} }">Next</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+
+		</div>
+		<div th:if="${totalPage==0}"  class="text-center my-3 container">
+			<h6 class="text-warning">Sorry books not present yet !!!</h6>
+		</div>
+		
+		<script th:if="${alert.equals('show')}">
+		Swal.fire({
+			  icon:'error',
+			  title: 'Invalid Book Name',
+			  width: 550,
+			  padding: '3em',
+			  text:"Book name no match to any book please enter correct book name.",
+			  backdrop: `
+			    rgba(255,233,150,0.3)
+			  `
+			});
+		</script>
+		<script>
+		$(".message").click(function(){
+			swal.fire("Sorry not valid!!","this book is not related to any store.","info");
+		});
+		function showBook(id){
+			window.location.assign("/bookInfo/"+id);
+		}
+		function searchBook(page){
+			var id=$(".bookId").val();
+			window.location.assign("/admin/searchBook/"+page+"/"+id);
+		}
+		
+		
+		function BestBookOfYear(bid){
+				
+				Swal.fire({
+					  title: 'Do you want to save the changes?',
+					  showDenyButton: true,
+					  showCancelButton: true,
+					  confirmButtonText: 'Save',
+					  denyButtonText: 'Dont Save',
+					  backdrop: `
+						    rgba(255,233,150,0.3)
+						  `,
+					}).then((result) => {
+					  /* Read more about isConfirmed, isDenied below */
+					  if (result.isConfirmed) {
+						  $.ajax({
+								type:'POST',
+								url:'/admin/BestBookOfYearAction',
+								data:JSON.stringify({bid:bid}),
+								dataType:'json',
+								contentType:'application/json',
+								cache:'false',
+								processData:'false',
+								success:function(response){
+									if(response.status=='success'){
+									
+									  
+										window.location.reload();
+									  
+									     
+									    			    	
+									}
+									else
+										Swal.fire('Error!', '', 'error');
+								},
+								error:function (error){
+									Swal.fire('Error!', '', 'error')
+									console.log("Admin store check : "+error);
+								}
+						  })
+					    
+					  } else if (result.isDenied) {
+					    Swal.fire('Changes are not saved', '', 'info')
+					  }
+					})
+					
+				
+			
+			
+			
+		}
+	
+		
+		</script>
+		
+	</section>
+</body>
+</html>

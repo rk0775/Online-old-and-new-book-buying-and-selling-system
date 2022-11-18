@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="admin/AdminDashboard::layout(~{::section})">
+<head>
+<meta charset="UTF-8" />
+<title>Document</title>
+</head>
+<body>
+	<section>
+
+		<div class="mt-2 p-3 ">
+			<h5 class="text-muted my-2">Place The To Store</h5>
+			<div class="fullDivider"></div>
+
+			<nav class="navbar navbar-expand-lg navbar-light">
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item active"><a class="nav-link"
+							th:href="@{/admin/orderCheckout/all,0}">All</a></li>
+						<li class="nav-item"><a class="nav-link"
+							th:href="@{/admin/orderCheckout/placed,0}">Store Orders </a></li>
+						<li class="nav-item"><a class="nav-link"
+							th:href="@{/admin/orderCheckout/notPlaced,0}">User Orders</a></li>
+						<li class="nav-item"><a class="nav-link"
+							th:href="@{/admin/orderCheckout/cancel,0}">Canceled</a></li>
+					</ul>
+					<form class="form-inline my-2 my-lg-0">
+						<div class="input-group mb-2">
+							<input type="text" class="orderId form-control rounded-input"
+								id="inlineFormInputGroup" placeholder="Username">
+							<div class="input-group-append">
+								<div onclick="searchOrder()" class="input-group-text bg-dyellow pointer"
+									style="border-radius: 25px;">
+									<i class=" fa fa-search"></i>
+								</div>
+							</div>
+						</div>
+
+					</form>
+				</div>
+			</nav>
+
+
+			<div class="mt-3 mx-3">
+				<table class=" table table-hover">
+					<thead>
+						<tr>
+							<th scope="col">#ID</th>
+							<th scope="col">Store Name</th>
+							<th scope="col">Book Owner</th>
+							<th scope="col">Price</th>
+							<th scope="col">Contact</th>
+							<th scope="col">Action</th>
+
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="order : ${orders}">
+							<th scope="row" th:text="${order.orderId}">1</th>
+							<td th:if="${order.paymentType=='online'}"
+								th:text="${repo.findByOwner(order.getOrderedBooks().getSeller()).getStoreName()}"></td>
+							<td th:if="${order.paymentType=='cash on delivery'}">
+								No Store Own</td>
+
+							<td th:text="${order.getOrderedBooks().getSeller().userName}"></td>
+							<td th:text="${order.getOrderPrice()}"></td>
+							<td
+								th:text="${order.getOrderedBooks().getSeller().getUserPhone()}"></td>
+							<td><button th:if="${order.orderStatus.equals('admin')}"
+									th:attr="onclick=|place(' ${order.orderId}','${order.getOrderPrice()}','${repo.findByOwner(order.getOrderedBooks().getSeller()).getRZkeyId()}','${repo.findByOwner(order.getOrderedBooks().getSeller()).getRZkeySecret()}')|"
+									class="btn btn-sm btn-warning">Place Order</button>
+								<button th:if="${order.orderStatus=='cancel'}"
+									disabled="disabled" class="btn btn-sm btn-danger">Order Cancel</button>
+									<button th:if="${order.orderStatus=='store'}"
+									disabled="disabled" class="btn btn-sm btn-primary">Store Order</button>
+									<button th:if="${order.orderStatus=='admin-store'}"
+									disabled="disabled" class="btn btn-sm btn-info">packaging...</button>
+									<button th:if="${order.orderStatus=='packed'}"
+									disabled="disabled" class="btn btn-sm btn-info">Order packed</button>
+									<button th:if="${order.orderStatus=='delivered'}"
+									disabled="disabled" class="btn btn-sm btn-info">Deliverd</button>
+									
+									</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+
+			 <div th:if="${totalPage!=0}" class="my-5">
+				<nav aria-label="Page navigation example ">
+					<ul th:if="${showPagination}" class="pagination justify-content-end">
+						<li th:classappend="${ currentPage == 0 ?'disabled':'enabled' }"
+							class="page-item"><a class="page-link"
+							th:href="@{'/admin/orderCheckout/'+${next}+${currentPage-1} }" tabindex="-1">Previous</a></li>
+						<li th:each="i : ${#numbers.sequence(1,totalPage)}"
+							class="page-item text-dark"><a class="page-link text-dark"
+							th:classappend="${ i==currentPage+1 }?'bg-dyellow' : ''"
+							th:href="@{'/admin/orderCheckout/'+${next}+${i-1} }"><span
+								th:text="${i}"></span></a></li>
+						<li class="page-item"
+							th:classappend="${ currentPage+1 == totalPage } ?'disabled':'enabled' ">
+							<a class="page-link"
+							th:href="@{'/admin/orderCheckout/'+${next}+${currentPage+1} }">Next</a>
+						</li>
+					</ul>
+				</nav>
+			</div> 
+
+		</div>
+		<div th:if="${totalPage==0}" class="mx-5">
+			<div class="alert alert-warning text-center">
+				<i class="fa fa-warning fa-3x text-warning"></i>
+				<h4>Sorry order not present !!!</h4>
+			</div>
+		</div>
+		<script th:if="${alert.equals('show')}">
+		Swal.fire({
+			  icon:'error',
+			  title: 'Invalid Order ID',
+			  width: 550,
+			  padding: '3em',
+			  text:"Please enter correct Order id to view the perticular order...",
+			  backdrop: `
+			    rgba(255,233,150,0.3)
+			  `
+			});
+		</script>
+		<script>
+			/* function clickOnBook(id) {
+				window.location.assign("/bookInfo/" + id);
+			} */
+			
+			function searchOrder(){
+				var id=$(".orderId").val();
+				window.location.assign("/admin/searchOrder/"+id);
+			}
+
+			function place(id, price, key, secret) {
+				console.log("ID : " + id + " Key : " + key + " Secret :  "
+						+ secret);
+				$
+						.ajax({
+							type : 'POST',
+							url : '/admin/do_placeTheOrderPayment',
+							data : JSON.stringify({
+								id : id,
+								price : parseInt(price),
+								key : key,
+								secret : secret
+							}),
+							dataType : 'json',
+							contentType : 'application/json',
+							cache : 'false',
+							processData : 'false',
+							success : function(response) {
+								console.log(response)
+								if(response.status=="offline"){
+									swal.fire("Order Place!!","The ofline store price collection is "+response.offlinePayment+" are collected..","info");
+									setTimeout(function(){
+										window.location.reload();
+									}, 2000);
+								}
+								if (response.status == "created") {
+									let options = {
+										key : key,
+										amount : response.amount,
+										currency : 'INR',
+										name:'The Online Bookstore',
+										description:'place the book order',
+										image:"https://p.kindpng.com/picc/s/62-622892_as-siraat-logo-portrays-the-spirit-of-serving.png",
+									
+										order_id : response.id,
+										handler : function(response) {
+											console
+													.log("payment successfull..");
+
+											$
+													.ajax({
+														type : 'POST',
+														url : '/admin/saveThePlaceOrderStatus',
+														data : JSON.stringify({
+															id : id,
+															price : price,
+															key : key,
+															secret : secret
+														}),
+														dataType : 'json',
+														contentType : 'application/json',
+														cache : 'false',
+														processData : 'false',
+														success : function(
+																response) {
+															setTimeout(function(){
+																window.location.reload();
+															}, 1000);
+														
+														},
+														error : function(error) {
+															console
+																	.log("error : "
+																			+ error);
+															alert("error generated");
+														}
+
+													})
+
+										},
+										prefill : {
+											name : "Admin",
+											email : "admin@gmail.com",
+											contact : "8806775292"
+										},
+										notes : {
+											address : "Razorpay Corporate Office"
+										},
+										theme : {
+											color : "#3399cc"
+										},
+									};
+									var rzp = new Razorpay(options);
+									rzp
+											.on(
+													'payment.failed',
+													function(response) {
+														console
+																.log(response.error.code);
+														console
+																.log(response.error.description);
+														console
+																.log(response.error.source);
+														console
+																.log(response.error.step);
+														console
+																.log(response.error.reason);
+														console
+																.log(response.error.metadata.order_id);
+														console
+																.log(response.error.metadata.payment_id);
+														alert("payment Fialed....");
+													});
+									rzp.open();
+								}
+							},
+							error : function(error) {
+								console.log(error)
+								swal.fire("Error!!","Something went wrong !! Shop owner enter the wrong payment ids(razorpay keyid or razorpay secretid)","error");
+							}
+						})
+			}
+		</script>
+	</section>
+</body>
+</html>

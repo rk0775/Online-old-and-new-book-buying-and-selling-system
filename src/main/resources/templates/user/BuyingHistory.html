@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="user/userPage::layout(~{::section})">
+<head>
+<meta charset="UTF-8" />
+<title>Document</title>
+</head>
+<body>
+	<section>
+		<div class="mt-2 p-3 ">
+			<h5 class="text-muted my-2">Shopping History</h5>
+			<div class="fullDivider"></div>
+
+			<nav class="navbar navbar-expand-lg navbar-light">
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item active"><a class="nav-link" href="#">All
+						</a></li>
+						<li class="nav-item"><a class="nav-link" href="#">Most
+								Rated</a></li>
+						<li class="nav-item"><a class="nav-link" href="#">Most
+								Populer</a></li>
+					</ul>
+					<form class="form-inline my-2 my-lg-0">
+						<div class="input-group mb-2">
+							<input type="text" class="form-control rounded-input"
+								id="inlineFormInputGroup" placeholder="Username">
+							<div class="input-group-append">
+								<div class="input-group-text bg-dyellow pointer"
+									style="border-radius: 25px;">
+									<i class=" fa fa-search"></i>
+								</div>
+							</div>
+						</div>
+
+					</form>
+				</div>
+			</nav>
+
+
+
+			<div class="row ">
+				<div th:each="order : ${orders} "
+				
+					class="col-6 col-sm-4 col-md-3 col-mp">
+					<div class="browseBookCard">
+						<div class="discount text-center">
+							<p class="text-light off-text "> <b> <span th:text="${order.getOrderedBooks().bookDiscount+'%'}"></span><br/> <small class="text-small m-up-5">OFF</small></b></p>
+						</div>
+						<img class="pointer" th:attr="onclick=|clickOnBook('${order.getOrderedBooks().bookId}')|"
+							th:src="@{'/image/webContent/BookCoverImages/'+${order.getOrderedBooks().bookCover}}"
+							alt="Cover not fount :{" />
+						<h6 class="mt-2" th:text="${order.getOrderedBooks().bookTitle}"></h6>
+
+						<small 	th:attr="onclick=|clickOnBook('${order.getOrderedBooks().bookId}')|" class="text-small pointer m-up-10  text-muted"
+							th:text="${order.getOrderedBooks().bookAuthor}"></small><br />
+							
+							<div class="bookBuyFooter d-flex  m-up-10">
+								<p class="text-success text-size-20"><b> Price : 120 </b><small class="text-danger mx-2"><del>150</del></small></p>
+								<small class="text-danger" th:text="${order.orderStatus}"></small>								
+							</div>
+							
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<script>
+			function clickOnBook(id) {
+				window.location.assign("/bookInfo/" + id);
+			}
+		</script>
+
+	</section>
+</body>
+</html>

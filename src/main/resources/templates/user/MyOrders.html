@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="user/userPage::layout(~{::section})">
+<head>
+<meta charset="UTF-8" />
+<title>Document</title>
+</head>
+<body>
+	<section>
+		<div class="mt-2 p-3 ">
+			<h5 class="text-muted my-2">My Oreders</h5>
+			<div class="fullDivider"></div>
+
+			<nav class="navbar navbar-expand-lg navbar-light">
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+
+					</ul>
+					<form class="form-inline my-2 my-lg-0">
+						<div class="input-group mb-2">
+							<input type="text" class="form-control rounded-input"
+								id="inlineFormInputGroup" placeholder="Username">
+							<div class="input-group-append">
+								<div class="input-group-text bg-dyellow pointer"
+									style="border-radius: 25px;">
+									<i class=" fa fa-search"></i>
+								</div>
+							</div>
+						</div>
+
+					</form>
+				</div>
+			</nav>
+
+			<div th:each="order : ${orders} " class="mt-4 glass-white">
+				<div class="alert ">
+					<div class="row">
+						<div class="col-sm-3">
+							<img style="width: 90%; height: 200px;"
+								th:src="@{'/image/webContent/BookCoverImages/'+${order.getOrderedBooks().bookCover}}"
+								alt="Image not fount" />
+						</div>
+						<div class="col-sm-5">
+							<h5 class="" th:text="${order.getOrderedBooks().bookTitle}"></h5>
+							<small class="text-muted">Book Author : <span
+								th:text="${order.getOrderedBooks().bookAuthor}"></span>
+							</small><br> <small class="text-muted">Book Owner : <sapn
+									th:text="${order.getOrderedBooks().getSeller().userName}"></sapn>
+							</small><br>  <br> <small
+								class="">Book Owner Address : <br>
+									<span th:text="${order.getOrderedBooks().getSeller().getUserAddr()}"></span> Dist. 
+									<span th:text="${order.getOrderedBooks().getSeller().getUserDistrict()}"></span> Pincode . 
+									<span th:text="${order.getOrderedBooks().getSeller().getUserPincode()}"></span><br>
+									Contact Number :  <span th:text="${order.getOrderedBooks().getSeller().userPhone}"></span>
+									
+								
+
+							</small> <small class="text-small text-muted"></small>
+
+						</div>
+						<div class="col-sm-4">
+							<small
+								class="">Shiping Address : <br>
+									<span th:text="${order.getOderAddr() }"></span> Dist. 
+									<span th:text="${order.getOrderDistrict()}"></span> Pincode . 
+									<span th:text="${order.getOrderPincode()}"></span><br>
+									Contact Number :  <span th:text="${order.orderContactNum}"></span>
+							</small> <br>
+							<small><b>Order Book Qauntity : </b><span
+								th:text="${order.bookQuantity}"></span></small>	<br>
+							<small> <b>Payment Type : </b> <span th:text="${order.paymentType}" ></span> </small><br>
+							<small> <b>Price : </b> <span class="text-success" th:text="${order.orderPrice}" ></span> </small>
+							
+							<!-- cash on delivery order  -->
+							<div class="mt-5 mb-0">	</div>
+							<div th:if="${order.orderStatus=='store'}"
+								class="text-right bottom">
+								<a th:href="@{'/user/cancelOrder/'+${order.orderId}}"
+									class="btn btn-sm btn-outline-danger">Cancel Order</a>
+								<button class="btn btn-sm btn-outline-info">Please Wait
+									For Packaging</button>
+							</div>
+							<!-- online order -->
+							<div th:if="${order.orderStatus=='admin'}"
+								class="text-right bottom">
+								<a 
+									class="text-info text-small">Your Order Now processing...</a>
+									<a th:href="@{'/user/cancelOrder/'+${order.orderId}}"
+									class="btn btn-sm btn-outline-danger mx-3">Cancel Order</a>
+							</div>
+							<!-- if online order place by admin -->
+							<div th:if="${order.orderStatus=='admin-store'}"
+								class="text-right bottom">
+								<a class="text-info text-small">Your Order Now Packaging...</a>
+							</div>
+							<!-- If order will packed  -->
+							<div th:if="${order.orderStatus=='packed'}"
+								class="text-right bottom">
+								<small class="text-info text-small">Order Is
+									Ready To Delivered</small>
+							</div>
+							<!-- if Order will deliver  -->
+							<div th:if="${order.orderStatus=='delivered'}"
+								class="text-right bottom">
+								<small class="text-muted">Order
+									Delivered</small>
+							</div>
+							
+							<!-- if Order will cancel  -->
+							<div th:if="${order.orderStatus=='cancel'}"
+								class="text-right bottom">
+								<small class="text-danger">Order Will Canceled</small>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- <div class="my-5">
+				<nav aria-label="Page navigation example ">
+					<ul class="pagination justify-content-end">
+						<li th:classappend="${ currentPage == 0 ?'disabled':'enabled' }"
+							class="page-item"><a class="page-link"
+							th:href="@{'/user/browseBooks/'+${currentPage-1} }" tabindex="-1">Previous</a></li>
+						<li th:each="i : ${#numbers.sequence(1,totalPage)}"
+							class="page-item text-dark"><a class="page-link text-dark"
+							th:classappend="${ i==currentPage+1 }?'bg-dyellow' : ''"
+							th:href="@{'/user/browseBooks/'+${i-1} }"><span
+								th:text="${i}"></span></a></li>
+						<li class="page-item"
+							th:classappend="${ currentPage+1 == totalPage } ?'disabled':'enabled' ">
+							<a class="page-link"
+							th:href="@{'/user/browseBooks/'+${currentPage+1} }">Next</a>
+						</li>
+					</ul>
+				</nav>
+			</div> -->
+
+		</div>
+		<div th:if="${msg=='success'}">
+		<script>
+			swal.fire({
+				title:"Canceled",
+				icon:'success',
+				text:"Your Order Successfully canceled...",
+			})
+		</script>
+		</div>
+	
+		<script>
+			function clickOnBook(id) {
+				window.location.assign("/bookInfo/" + id);
+			}
+			function viewOrderDitails(id) {
+				window.location.assign("/user/orderBookDetails/" + id);
+			}
+		</script>
+
+	</section>
+</body>
+</html>

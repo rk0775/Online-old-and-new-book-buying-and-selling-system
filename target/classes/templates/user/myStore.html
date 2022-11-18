@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="user/userPage::layout(~{::section})">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<section>
+
+		<div class="mt-2 p-3 ">
+			<h5 class="text-muted my-2">Register Your Book Store</h5>
+			<div class="fullDivider"></div>
+			<div th:if="${store!='none'}" >
+				<div class="row card offer-card" style="height:45vh">
+					<div class="col-sm-4 text-center">
+						<img style="width: 80%; height:auto;"
+								th:src="@{'/image/webContent/storeImages/'+${store.storePic}}"
+								alt="Server Error!!" />
+					</div>
+					<div class="col-sm-8">
+						<h4 class="text-dark" th:text="${store.storeName}"></h4>
+						<h6 class="text-muted m-up-10" th:text="${store.owner.userName}"></h6>
+						<small class="text-muted" th:text="${'Store Voucher End date : '+store.enddate}"></small>
+						<p class="text-muted" th:text="${'Address : '+store.storeAddr}"></p>
+						<p class="text-muted m-up-10" th:text="${'Store Discription : '+store.storeDis}"></p>
+						<h6 class="m-up-10">Store Remaining Days :&nbsp;<b class="text-info" th:text="${' '+day+' days'}"></b>	 </h6>
+						<h6 class="m-up-10">Pending Payment :&nbsp;<b class="text-success mx-2" th:text="${store.placeOrderPrice}"></b> <i class=" text-success fa-solid fa-indian-rupee-sign"></i>	</h6>
+						<small class="text-success m-up-20" th:text="${'Total Earnings : '+store.totalEarnings}"></small>
+						<div class="text-right">
+							<a th:href="@{/user/editStorePage}" class="btn btn-sm btn-outline-warning">Edit</a>
+							<a th:href="@{/user/ckeckStoreOrder}" class="btn btn-sm btn-outline-primary">Check Orders</a>
+							<a th:if="${store.RZkeyId==null}" th:href="@{'/user/getpayment/'+${store.storeId}}" class="btn btn-sm btn-outline-success">Payment Receive</a>
+						
+						</div>
+					</div>
+				
+				</div>
+			
+			</div>
+			
+			
+			<div class="row pl-0 pl-sm-5">
+				<div class="col-12 col-sm-6 col-md-5  offer-card">
+					<div class="text-center mt-2 ">
+						<i class="fa-solid fa-store text-success fa-3x"></i>
+						<h6 class="text-success my-3">1 Month Plan</h6>
+					</div>
+					<p class="text-small text-justify text-muted">One month plan in
+						just <b>39 <i class="fa-solid fa-indian-rupee-sign"></i></b> Lorem
+						ipsum dolor sit amet, consectetur adipisicing elit. Ducimus eius
+						debitis amet ipsam nam obcaecati.
+					</p>
+					<div class="my-2 fullDivider"></div>
+					<div class="  text-right ">
+						<a th:href="@{/user/storeRegistrationForm/1}" class="btn btn-sm btn-outline-success">Buy 39 <i
+							class="fa fa-indian-rupee-sign"></i> Plan
+						</a>
+					</div>
+				</div>
+				<div class="col-12 col-sm-6 col-md-5  offer-card">
+					<div class="text-center mt-2 ">
+						<i class="fa-solid fa-store text-primary fa-3x"></i>
+						<h6 class="text-primary my-3">3 Month Plan</h6>
+					</div>
+					<p class="text-small text-justify text-muted">Three month plan in
+						just <b>149 <i class="fa-solid fa-indian-rupee-sign"></i></b> Lorem
+						ipsum dolor sit amet, consectetur adipisicing elit. Ducimus eius
+						debitis amet ipsam nam obcaecati.
+					</p>
+					<div class="my-2 fullDivider"></div>
+					<div class="  text-right ">
+						<a th:href="@{/user/storeRegistrationForm/2}" class="btn btn-sm btn-outline-primary">Buy 149 <i
+							class="fa fa-indian-rupee-sign"></i> Plan
+						</a>
+					</div>
+				</div>
+				<div class="col-12 col-sm-6 col-md-5  offer-card">
+					<div class="text-center mt-2 ">
+						<i class="fa-solid fa-shop text-warning fa-3x"></i>
+						<h6 class="text-warning my-3">6 Month Plan</h6>
+					</div>
+					<p class="text-small text-justify text-muted">Six month plan in
+						just <b>259 <i class="fa-solid fa-indian-rupee-sign"></i></b> Lorem
+						ipsum dolor sit amet, consectetur adipisicing elit. Ducimus eius
+						debitis amet ipsam nam obcaecati.
+					</p>
+					<div class="my-2 fullDivider"></div>
+					<div class="  text-right ">
+						<a th:href="@{/user/storeRegistrationForm/3}" class="btn btn-sm btn-outline-warning">Buy 259 <i
+							class="fa fa-indian-rupee-sign"></i> Plan
+						</a>
+					</div>
+				</div>
+				<div class="col-12 col-sm-6 col-md-5  offer-card">
+					<div class="text-center mt-2 ">
+						<i class="fa-solid fa-shop text-info fa-3x"></i>
+						<h6 class="text-info my-3">1 Year Plan</h6>
+					</div>
+					<p class="text-small text-justify text-muted">One year plan in
+						just <b>449 <i class="fa-solid fa-indian-rupee-sign"></i></b> Lorem
+						ipsum dolor sit amet, consectetur adipisicing elit. Ducimus eius
+						debitis amet ipsam nam obcaecati.
+					</p>
+					<div class="my-2 fullDivider"></div>
+					<div class="  text-right ">
+						<a th:href="@{/user/storeRegistrationForm/4}" class="btn btn-sm btn-outline-info">Buy 449 <i
+							class="fa fa-indian-rupee-sign"></i> Plan
+						</a>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<script th:if="${timeMsg=='wait'}">
+		Swal.fire({
+			icon:'info',
+			  title: 'Wait For Admin Authentication !!',
+			  text:"Wait for admin consideration for your store . please provide correct information!!",
+			  backdrop: `
+			    rgba(255,233,150,0.3)
+			  `
+			});
+		</script>
+		<script th:if="${timeMsg=='true'}">//time limit < 3 day
+		Swal.fire({
+			  title: 'Your Store Voucher will expire soon!!',
+			  width: 550,
+			  padding: '3em',
+			  text:"Your voucher will be expire soon please take new vaucher for continue.",
+			  backdrop: `
+			    rgba(255,233,150,0.3)
+			  `
+			});
+		</script>
+	
+	</section>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="admin/AdminDashboard::layout(~{::section})">
+<head>
+<meta charset="UTF-8" />
+<title>Document</title>
+</head>
+<body>
+	<section>
+
+		<div class="mt-2 p-3 ">
+			<h5 class="text-muted my-2">Place The To Store</h5>
+			<div class="fullDivider"></div>
+
+			<nav class="navbar navbar-expand-lg navbar-light">
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item active"><a class="nav-link"
+							th:href="@{/admin/stores/all,0}">All</a></li>
+						<li class="nav-item"><a class="nav-link"
+							th:href="@{/admin/stores/check,0}">Check stores </a></li>
+						<li class="nav-item"><a class="nav-link"
+							th:href="@{/admin/stores/uncheck,0}">Uncheck Stores</a></li>
+						
+					</ul>
+					<form class="form-inline my-2 my-lg-0">
+						<div class="input-group mb-2">
+							<input type="text" class="storeId form-control rounded-input"
+								id=" inlineFormInputGroup "  placeholder="enter store id">
+							<div class="input-group-append">
+								<div onclick="searchStore()" class="input-group-text bg-dyellow pointer"
+									style="border-radius: 25px;">
+									<i class=" fa fa-search"></i>
+								</div>
+							</div>
+						</div>
+
+					</form>
+				</div>
+			</nav>
+			
+			<div  class="mt-3 mx-3">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th scope="col">#ID</th>
+							<th scope="col">Store Name</th>
+							<th scope="col">End Date</th>
+							<th scope="col">Contact</th>
+							<th scope="col">Pending Payment</th>
+							<th scope="col">Action</th>
+							<th scope="col">Check</th>
+
+						</tr>
+					</thead>
+					<tbody >
+						<tr  th:each="store : ${stores}"  class="pointer" >
+							<th scope="col" th:text="${store.storeId}"></th>
+							<th scope="col" th:text="${store.storeName}"></th>
+							
+							<th scope="col" th:text="${store.enddate}">End Date</th>
+							<th scope="col" th:text="${store.owner.userPhone}">Contact</th>
+							<th class="text-center text-success" scope="col" th:text="${store.placeOrderPrice}">Pending Payment</th>
+							<th class="text-center text-success"><button class="btn btn-sm btn-outline-warning" th:attr="onclick=| storeDetail('${store.storeId}','${currentPage}','${action}')|" >View</button></th>
+							<th scope="col">
+								<!-- Default switch -->
+								<div class="custom-control custom-switch">
+								
+								<i th:if="${store.checkByAdmin==true}"  th:attr="onclick=|ckeckStore('${ store.storeId }' , '${ store.checkByAdmin }')|"  class="fa-2x text-success fa-solid fa-circle-check"></i>
+								<i th:if="${store.checkByAdmin==false}" th:attr="onclick=|ckeckStore('${ store.storeId }' , '${ store.checkByAdmin }')|" class="fa-2x text-muted fa-solid fa-circle"></i>	
+								</div>
+							</th>
+
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+			<div th:if="${ totalPage!=0 }" class="my-5">
+				<nav th:if="${showPagination}" aria-label="Page navigation example ">
+					<ul class="pagination justify-content-end">
+						<li th:classappend="${ currentPage == 0 ?'disabled':'enabled' }"
+							class="page-item"><a class="page-link"
+							th:href="@{'/admin/stores/'+${action}+','+${currentPage-1} }" tabindex="-1">Previous</a></li>
+						<li th:each="i : ${#numbers.sequence(1,totalPage)}"
+							class="page-item text-dark"><a class="page-link text-dark"
+							th:classappend="${ i==currentPage+1 }?'bg-dyellow' : ''"
+							th:href="@{'/admin/stores/'+${action}+','+${i-1} }"><span
+								th:text="${i}"></span></a></li>
+						<li class="page-item"
+							th:classappend="${ currentPage+1 == totalPage } ?'disabled':'enabled' ">
+							<a class="page-link"
+							th:href="@{'/admin/stores/'+${action}+','+${currentPage+1} }">Next</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+
+		</div>
+		<script th:if="${alert.equals('show')}">
+		Swal.fire({
+			  icon:'error',
+			  title: 'Invalid Store ID',
+			  width: 550,
+			  padding: '3em',
+			  text:"Please enter correct store id to view the store...",
+			  backdrop: `
+			    rgba(255,233,150,0.3)
+			  `
+			});
+		</script>
+		<script>
+			function searchStore(){
+				var id=$(".storeId").val();
+				window.location.assign("/admin/searchStore/"+id);
+			}
+			function ckeckStore(sid,admin){
+				if(admin){
+					Swal.fire({
+						  title: 'Do you want to save the changes?',
+						  showDenyButton: true,
+						  showCancelButton: true,
+						  confirmButtonText: 'Save',
+						  denyButtonText: 'Dont Save',
+						  backdrop: `
+							    rgba(255,233,150,0.3)
+							  `,
+						}).then((result) => {
+						  /* Read more about isConfirmed, isDenied below */
+						  if (result.isConfirmed) {
+							  $.ajax({
+									type:'POST',
+									url:'/admin/storeCheckAction',
+									data:JSON.stringify({sid:sid}),
+									dataType:'json',
+									contentType:'application/json',
+									cache:'false',
+									processData:'false',
+									success:function(response){
+										if(response.status=='success'){
+										 
+										 //setTimeout(function () {
+											window.location.reload();
+										   // }, 0);
+										}
+										else
+											Swal.fire('Error!', '', 'error');
+									},
+									error:function (error){
+										Swal.fire('Error!', '', 'error')
+										console.log("Admin store check : "+error);
+									}
+							  })
+						    
+						  } else if (result.isDenied) {
+						    Swal.fire('Changes are not saved', '', 'info')
+						  }
+						})
+						
+					
+				
+				}
+				
+			}
+		
+			
+			function storeDetail(sid,page,action){
+				window.location.assign("/admin/storeInformation/"+sid+","+page+","+action);
+			}
+		</script>
+	</section>
+</body>
+</html>
+
+
+

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="navbar::layout(~{::section})">
+<head>
+<meta charset="ISO-8859-1">
+</head>
+<body>
+	<section>
+		<!--Modal Launch Button-->
+		<div class="bg-fyellow" style="height: 61px"></div>
+		<div class="container mt-5">
+			<div class="row py-2">
+				<div class="col-12 col-sm-10 col-md-8">
+					<h2 class="title-700">COUSTOMERS FEEDBACKS</h2>
+					<small class="text-small text-muted">Provide your kind
+						feedback for other user can help to justify our service. In
+						feedback section not provide the your personal details.Please
+						login first then provide feedback.</small>
+				</div>
+				<div class="col-12 col-sm-2 col-md-4 text-right">
+					<button th:if="${!loginUser.equals('none') && loginUser.enabled}"
+						type="button" class="btn btn-block bg-fyellow btn-lg openmodal"
+						data-toggle="modal" data-target="#myModal">Provide
+						Feedback</button>
+
+				</div>
+			</div>
+		</div>
+
+
+
+		<!--Division for Modal-->
+		<div id="myModal" class="modal fade" role="dialog">
+
+			<!--Modal-->
+			<div class="modal-dialog model-lg">
+
+				<!--Modal Content-->
+				<div class="modal-content">
+
+					<!-- Modal Header-->
+					<div class="modal-header">
+						<h4>Feedback Request</h4>
+
+						<!--Close/Cross Button-->
+						<button type="button" class="close" data-dismiss="modal"
+							style="color: white;">&times;</button>
+					</div>
+
+					<!-- Modal Body-->
+					<div class="modal-body text-center">
+						<i class="far fa-file-alt fa-4x mb-3 animated rotateIn icon1"></i>
+						<h4>Your opinion matters</h4>
+						<h5>
+							Help us improve our product? <strong>Give us your
+								feedback.</strong>
+						</h5>
+						<hr>
+						<h6>Your Rating</h6>
+					</div>
+					<form th:action="@{'/user/saveFeedBack/'+${currentPage}}" method="Post"
+						th:object="${feedback}">
+						<!-- Radio Buttons for Rating-->
+						<div class="form-check mb-4">
+							<input name="rate" type="radio" value="5"> <label
+								class="ml-3">Very good</label>
+						</div>
+						<div class="form-check mb-4">
+							<input name="rate" type="radio" value="4"> <label
+								class="ml-3">Good</label>
+						</div>
+						<div class="form-check mb-4">
+							<input name="rate" type="radio" checked="checked" value="3">
+							<label class="ml-3">Mediocre</label>
+						</div>
+						<div class="form-check mb-4">
+							<input name="rate" type="radio" value="2"> <label
+								class="ml-3">Bad</label>
+						</div>
+						<div class="form-check mb-4">
+							<input name="rate" type="radio" value="1"> <label
+								class="ml-3">Very Bad</label>
+						</div>
+
+						<!--Text Message-->
+						<div class="text-center">
+							<h4>Share your experience</h4>
+						</div>
+						<textarea name="feedbackStr"
+							th:classappend="${#fields.hasErrors('feedbackStr')?'is-invalid':''}"
+							id="" class="box-shadow-none form-control "></textarea>
+						<div th:each="e : ${#fields.errors('feedbackStr')} "
+							th:text="${e}" class="invalid-feedback"></div>
+
+
+						<!-- Modal Footer-->
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">
+								Send <i class="fa fa-paper-plane"></i>
+							</button>
+							<a href="" class="btn btn-outline-primary" data-dismiss="modal">Cancel</a>
+						</div>
+					</form>
+				</div>
+
+			</div>
+
+		</div>
+		<!-- Model close -->
+
+		<div class="container" style="margin-top: 100px">
+			<div class="divider"></div>
+			<h4 class="my-5 text-muted">User Feedbacks</h4>
+			<div th:each="f : ${userfeedbacks}" class="row my-4">
+				<div class="col-sm-5 text-center">
+					<img style="width: 170px; height: 170px; border-radius: 50%"
+						th:src="@{'/image/webContent/userImages/'+${f.fpuser.userPic}}"
+						alt="" class="mt-2" />
+				</div>
+				<div class="col-sm-7">
+					<i class="fa-solid fa-quote-left text-primary"></i>
+					<p class="ml-3 text-dark text-justify" th:text="${f.feedbackStr}"></p>
+					<small th:text="${f.date}"></small>
+					<div class="ratings" th:attr="data-rating=|${f.rate}|"></div>
+					<div th:if="${f.rate==1}" class="">
+						<i class="fa fa-star fa-2x text-primary"></i><i
+							class="fa fa-star fa-2x text-muted"></i><i
+							class="fa fa-star fa-2x text-muted"></i><i
+							class="fa fa-star fa-2x text-muted"></i><i
+							class="fa fa-star fa-2x text-muted"></i>
+					</div>
+					<div th:if="${f.rate==2}" class="">
+						<i class="fa fa-star fa-2x text-primary"></i><i
+							class="fa fa-star fa-2x text-primary"></i><i
+							class="fa fa-star fa-2x text-muted"></i><i
+							class="fa fa-star fa-2x text-muted"></i><i
+							class="fa fa-star fa-2x text-muted"></i>
+					</div>
+					<div th:if="${f.rate==3}" class="">
+						<i class="fa fa-star fa-2x text-primary"></i><i
+							class="fa fa-star fa-2x text-primary"></i><i
+							class="fa fa-star fa-2x text-primary"></i><i
+							class="fa fa-star fa-2x text-muted"></i><i
+							class="fa fa-star fa-2x text-muted"></i>
+					</div>
+					<div th:if="${f.rate==4}" class="">
+						<i class="fa fa-star fa-2x text-primary"></i><i
+							class="fa fa-star fa-2x text-primary"></i><i
+							class="fa fa-star fa-2x text-primary"></i><i
+							class="fa fa-star fa-2x text-primary"></i><i
+							class="fa fa-star fa-2x text-muted"></i>
+					</div>
+					<div th:if="${f.rate==5}" class="">
+						<i class="fa fa-star fa-2x text-primary"></i><i
+							class="fa fa-star fa-2x text-primary"></i><i
+							class="fa fa-star fa-2x text-primary"></i><i
+							class="fa fa-star fa-2x text-primary"></i><i
+							class="fa fa-star fa-2x text-primary"></i>
+					</div>
+
+					<h4 class="text-capitalize">
+						<b th:text="${f.fpuser.userName}"></b>
+					</h4>
+				</div>
+			</div>
+
+
+			<div th:if="${totalPage!=0}" class="my-5">
+				<nav aria-label="Page navigation example ">
+					<ul class="pagination justify-content-end">
+						<li th:classappend="${ currentPage == 0 ?'disabled':'enabled' }"
+							class="page-item"><a class="page-link"
+							th:href="@{'/feedback/'+${currentPage-1} }" tabindex="-1">Previous</a></li>
+						<li th:each="i : ${#numbers.sequence(1,totalPage)}"
+							class="page-item text-dark"><a class="page-link text-dark"
+							th:classappend="${ i==currentPage+1 }?'bg-dyellow' : ''"
+							th:href="@{'/feedback/'+${i-1} }"><span th:text="${i}"></span></a></li>
+						<li class="page-item"
+							th:classappend="${ currentPage+1 == totalPage } ?'disabled':'enabled' ">
+							<a class="page-link" th:href="@{'/feedback/'+${currentPage+1} }">Next</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+
+
+		</div>
+
+
+
+
+		<script th:if="${alert.equals('error')}">
+		Swal.fire({
+			  icon:'warning',
+			  title: 'Feedback Not Send...',
+			  padding: '3em',
+			  text:"Your feedback back not sended. something went wrong please check your feedback",
+			  backdrop: `
+			    rgba(255,233,150,0.3)
+			  `
+			});
+		</script>
+		<script th:if="${alert.equals('success')}">
+		Swal.fire({
+			  icon:'success',
+			  title: 'Feedback Send...',
+			  padding: '3em',
+			  text:"Your feedback back sended successfuly. thank for your kind responce.",
+			  backdrop: `
+			    rgba(255,233,150,0.3)
+			  `
+			});
+		</script>
+	</section>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="user/userPage::layout(~{::section})">
+<head>
+<meta charset="UTF-8" />
+<title>Document</title>
+</head>
+<body>
+	<section>
+		<div class="mt-2 p-3 ">
+			<h5 class="text-muted my-2">My Books</h5>
+			<div class="fullDivider"></div>
+
+			<nav class="navbar navbar-expand-lg navbar-light">
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item active"><a class="nav-link" th:href="@{/user/ckeckStoreOrder/all}">All
+						</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/user/ckeckStoreOrder/complete}">Completed</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/user/ckeckStoreOrder/uncomplete}">Not Completed</a></li>
+					</ul>
+					<form class="form-inline my-2 my-lg-0">
+						<div class="input-group mb-2">
+							<input type="text" class="form-control rounded-input"
+								id="inlineFormInputGroup" placeholder="Username">
+							<div class="input-group-append">
+								<div class="input-group-text bg-dyellow pointer"
+									style="border-radius: 25px;">
+									<i class=" fa fa-search"></i>
+								</div>
+							</div>
+						</div>
+
+					</form>
+				</div>
+			</nav>
+
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<td>#BookID</td>
+						<td>Book Name</td>
+						<td>Book Price</td>
+						<td>Remaining Quntity</td>
+						<td>Actions</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="order : ${orders}">
+						<td th:text="${order.orderedBooks.bookId}"></td>
+						<td th:text="${order.orderedBooks.bookTitle}"></td>
+						<td th:text="${order.orderedBooks.bookPrice}"></td>
+						<td th:text="${order.orderedBooks.bookQuantity}"></td>
+						<td><a th:if="${order.orderStatus=='store'}"
+							th:href="@{'/user/placeOrder/'+${order.orderId}}"
+							class="btn btn-sm btn-outline-dark">Normal User Order</a> <a
+							th:if="${order.orderStatus=='admin-store'}"
+							th:href="@{'/user/placeOrder/'+${order.orderId}}"
+							class="btn btn-sm btn-outline-danger">Admin Place Order</a>
+							<span
+							th:if="${order.orderStatus=='packed'}"
+							class="text-success">Order Place</span>
+							</td>
+					</tr>
+
+				</tbody>
+			</table>
+
+
+
+		</div>
+
+		<script>
+			function clickOnBook(id) {
+				window.location.assign("/bookInfo/" + id);
+			}
+			function viewOrderDitails(id) {
+				window.location.assign("/user/orderBookDetails/" + id);
+
+			}
+		</script>
+
+	</section>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="navbar::layout(~{::section})">
+<head>
+<meta charset="ISO-8859-1">
+<title th:text="${title}"></title>
+</head>
+<body class="bg-fwhite">
+	<section>
+	<div class="bg-fyellow" style="height: 61px"></div>
+	<div th:if="${user.enabled==false}" class="p-5 m-5">
+		<div class="text-center text-danger">
+			<h4 class="mt-3 text-danger"><i class="fa-solid fa-warning"></i>&nbsp;Something wrong!!</h4>
+			<p class="text-muted">Please verify your account first then login and then able to checkout the order.</p>
+		</div>
+	</div>
+		<div th:if="${user.enabled}" class="container">
+			
+
+				<div class="wrapper ">
+					<div class="progresses py-4">
+						<ul class="d-flex align-items-center justify-content-between">
+							<li id="step-1" class="blue"></li>
+							<li id="step-2" class="blue"></li>
+							<li id="step-3"></li>
+						</ul>
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: 70%;"
+								aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="row">
+					<div class="col-sm-7 card card-body">
+						<div class="mt-4">
+							<form action="" id="checkOutformId">
+							<small class="text-muted text-small">Customer name</small>
+							
+								<div class="form-outline mb-4">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text bg-light">
+												<i class="fa-solid fa-user"></i>
+											</div>
+										</div>
+										<input type="hidden" id="uemail" th:value="${user.userEmail}">
+										<input type="text" th:value="${user.userName}" id="userName"
+											class="box-shadow-none form-control" placeholder="Enter name">
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-6 form-outline mb-4">
+											<small class="text-muted text-small">Customer phone Number</small>
+									
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text bg-light">
+													<i class="fa-solid fa-phone"></i>
+												</div>
+											</div>
+											<input type="text" th:value="${user.userPhone}"
+												id="oldPhoneNum" class="box-shadow-none form-control"
+												placeholder="Enter phone number">
+										</div>
+									</div>
+									<div class="col-sm-6 form-outline mb-4">
+										<small class="text-muted text-small">Customer optional phone number</small>
+									
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text bg-light">
+													<i class="fa-solid fa-mobile"></i>
+												</div>
+											</div>
+											<input type="text" id="newPhoneNum"
+												class="box-shadow-none form-control"
+												placeholder="Enter another number(Optional)">
+										</div>
+									</div>
+								</div>
+								<input type="hidden" th:value="${rzKey}" id="rzKey" />
+								<small class="text-muted text-small">Customer old address</small>
+								
+								<textarea class="form-control mb-4"  th:text="${oldAddr}" name=""
+									id="oldAddr" cols="30" rows="5"></textarea>
+								<input onclick="changeAddress()" type="checkbox"
+									id="checkBoxaddr" />
+								<lable class="text-muted px-3">Change the sghipping
+								address</lable>
+
+								<div id="changeAddrDiv" class="hide mb-4">
+									<div class="row my-2">
+										<div class="col-sm-6">
+											<input id="newDistrict" class="form-control" type="text"
+												placeholder="Enter the District" />
+
+										</div>
+										<div class="col-sm-6">
+											<input id="newPincode" pattern="^[1-9][0-9]{5}$" type="text" class="form-control"
+												placeholder="Enter the Pincode" />
+										</div>
+									</div>
+									<small class="text-small">Enter the new adrress</small>
+									<textarea class="form-control" name="" id="newAddr" cols="30" rows="4"></textarea>
+								</div>
+								
+						<!--  		<span> <input type="radio" value="Cash on delivery" name="PaymentType" /> Cash On Delivery <input type="radio" value="online" name="PaymentType" /> Online </span> -->
+								
+								<button type="submit" class=" btn btn-block bg-dyellow my-5">Go To
+									Payment</button>
+							</form>
+						</div>
+
+					</div>
+					<div class="col-sm-5 cart-body px-4"></div>
+				</div>
+		</div>
+
+		<script >
+
+		$(document).ready(function (){
+			$("#checkOutformId").on('submit' ,function(e){
+				e.preventDefault();
+				/* var payType="";
+				document.getElementByName("PaymentType").forEach(radio =>{
+					if(radio.checked){
+						payType=radio.value;
+					}	
+				}) */
+				var userName=$("#userName").val();
+				var userEmail=$("#uemail").val();
+				var oldPhoneNum=$("#oldPhoneNum").val();
+				var newPhoneNum=$("#newPhoneNum").val();
+				var checkBoxaddr=document.getElementById("checkBoxaddr");
+				if(userName==''||userEmail==''||oldPhoneNum==''){
+					swal.fire("Please fill all information");
+					return;
+				}
+				var oldAddr=$("#oldAddr").val();
+				var newDistrict=$("#newDistrict").val();
+				var newPincode=$("#newPincode").val();
+				var newAddr=$("#newAddr").val();
+				var rzKey=$("#rzKey").val();
+				var changeAddrFlag=false;
+				if(checkBoxaddr.checked){
+					changeAddrFlag=true;
+					if(newDistrict=='' || newPincode=='' || newDistrict==null || newPincode==null){
+						swal.fire("Please fill adrress information");
+						return;
+					}
+				}
+				
+				//alert(payType);
+				
+				var OrderdBookIds=[];
+				var bookQuntity=[];
+				var d=[];
+				//var d[JSon].parl()
+				cart=JSON.parse(localStorage.getItem("cart"));
+				if(cart==null){
+					swal.fire("Empty Cart!!","Sorry your cart is empty now. Payment not possible","error");
+					return;
+				} 
+				cart.map((item)=>{
+					 OrderdBookIds.push(item.id);
+					 bookQuntity.push(item.count);
+					 var o={i:item.id,q:item.count};
+					 d.push(o);
+				 })
+				//alert(payType);
+		        var dataform=new FormData(this);
+				$.ajax({
+					type:'POST',
+					url:'/user/do_paymentOfBook',
+					data:JSON.stringify({OrderdBookIds:OrderdBookIds,bookQuntity:bookQuntity}),
+					dataType:'json',
+					contentType:'application/json',
+					cache:'false',
+					processData:'false',
+					success:function(response){
+						console.log(response)
+						//alert(response.status+"   "+rzKey);
+						if(response.status=="quntityLess" ){
+							swal.fire("Less Quntity Available", response.bname+" book quntity are "+response.rqun+" please wait new stock of book" ,"error");
+						}
+			 			
+						if(response.status=="created"){
+							let options={
+									key:rzKey,
+									amount:response.amount,
+									currency:'INR',
+									name:'The Online Bookstore',
+									description:'Buy the Books..',
+									image:"https://p.kindpng.com/picc/s/62-622892_as-siraat-logo-portrays-the-spirit-of-serving.png",
+								//	image:"https://drive.google.com/file/d/10I2GLN0iohFLYzLDYa9N1cE76GITL5FY/view?usp=sharing",
+									order_id:response.id,
+									handler:function(response){
+										console.log("payment successfull..");
+										
+										$.ajax({
+											type:'POST',
+											url:'/user/SaveBookOrder',
+											data:JSON.stringify({changeAddrFlag:changeAddrFlag,newAddr:newAddr,newPincode:newPincode,newDistrict:newDistrict,userName:userName,newPhoneNum:newPhoneNum,OrderdBookIds:OrderdBookIds,bookQuntity:bookQuntity}),
+											dataType:'json',
+											contentType:'application/json',
+											cache:'false',
+											processData:'false',
+											success:function(response){
+												localStorage.clear();
+												swal.fire({
+													icon:'success',
+													title:"Payment Successfull",
+													text:"Your Order successfull placed..",
+													showConfirmButton:false,
+												})
+												setTimeout(function() {
+												window.location.assign("/user/myOrders");
+												}, 2000); 
+												
+												
+											},
+											error:function(error){
+												console.log("error : "+error);
+												alert("error generated");
+											}
+											
+										})
+
+									},
+									 prefill: {
+									        name: userName,
+									        email: userEmail,
+									        contact: oldPhoneNum
+									    },
+									    notes: {
+									        address: "Razorpay Corporate Office"
+									    },
+									    theme: {
+									        color: "#3399cc"
+									    },
+							};
+							var rzp = new Razorpay(options);
+							rzp.on('payment.failed', function (response){
+						        console.log(response.error.code);
+						        console.log(response.error.description);
+						        console.log(response.error.source);
+						        console.log(response.error.step);
+						        console.log(response.error.reason);
+						        console.log(response.error.metadata.order_id);
+						        console.log(response.error.metadata.payment_id);
+						        alert("payment Fialed....");
+						});
+							rzp.open();
+						} 
+					},	
+					error:function(error){
+						console.log(error)
+						swal.fire("Something went wrong !! please check net connection...")
+					}
+				})
+				
+			} )
+		})
+		
+			function changeAddress() {
+				var check = document.getElementById("checkBoxaddr");
+				var div = document.getElementById("changeAddrDiv");
+				if (check.checked) {
+					div.classList.remove("hide");
+				} else {
+					div.classList.add("hide");
+				}
+			}
+			
+		</script>
+	</section>
+</body>
+</html>

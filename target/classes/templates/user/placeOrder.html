@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="user/userPage::layout(~{::section})">
+<head>
+<meta charset="UTF-8" />
+<title>Document</title>
+</head>
+<body>
+	<section>
+		<div class="container-fluid">
+		<div class="mt-3 ml-5">
+				<a style="text-decoration: none;"
+					th:href="@{ '/user/orderBookDetails/'+${page} }"><i
+					class="text-muted  fa-solid fa-arrow-left"></i></a>
+			</div>
+		
+			<div class="row mt-2 mb-5 mx-5 p-3 alert alert-light glass-white-noblur ">
+				<div class="col-sm-3 text-center">
+					<img style="width: 100%; height:auto; border-radius: 10px"
+						th:src="@{'/image/webContent/userimages/'+${order.getOrderedUser().userPic}}" alt="Image not fount" />
+				</div>
+				<div class="col-sm-5">
+					<h5 th:text="${order.getOrderedUser().getUserName()}"></h5>
+					<h6 class="">
+						Payment Type : <span th:text="${order.getPaymentType()}"></span>
+					</h6>
+					<p class="text-muted">
+						Contact Number : <span
+							th:text="${order.getOrderedUser().getUserPhone()}"></span>
+					</p>
+					<small class="text-muted" th:text="${pAddr}"></small>
+				</div>
+				<div class="col-sm-4">
+					<h6 class="text-dark">Shipping Address</h6>
+					<small th:text="${sAddr}"></small><br> <small><b>Quntity
+							Of Books : </b><span th:text="${order.bookQuantity}"></span></small><br>
+					Payment : <span th:if="${order.paymentType=='online'}" class="text-success"> Done</span><span th:if="${order.paymentType=='cash on delivery'}" class="text-muted">Cash on Delivery</span> 
+						
+				</div>
+		
+			</div>
+
+		</div>
+
+		<div class="row">
+			<div class="col-sm-8 offset-sm-2">
+
+				<div class="card card-body glass-white-noblur">
+					<h5 class="text-muted ">FILL THIS DETAILS FOR PROCEED</h5>
+
+					<form action="" class="form my-3">
+						<small class="text-small text-muted">Enter the delivery
+							person name</small> <input th:if="${packages.size()>0}" type="text"
+							id="dBoy" th:value="${packages.get(0).deliveryPerson}"
+							class="form-control" /> <input th:if="${packages.size()<=0}"
+							type="text" id="dBoy" class="form-control" /> <span
+							th:each="i : ${#numbers.sequence(1,order.bookQuantity)}">
+							<small class="text-small text-muted">Enter the <span
+								th:text="${i}"></span> book ISBN number
+						</small>
+						 <input th:if="${packages.size()>0}" th:classappend="${ i }"
+							th:value="${packages.get(i-1).bookIsbnNumber}"
+							th:attr="value=${packages.size()>0 ? '${packages.get(i-1).bookIsbnNumber}':''}"
+							required="required" class="form-control my-1" />
+							
+							
+							<input th:if="${packages.size()>0}" type="hidden" 
+							th:value="${packages.get(i-1).orderPackageId}"
+							th:attr="id=${ i }"
+							 />	
+							
+							 <input
+							th:if="${packages.size()<=0}" th:classappend="${ i }"
+							required="required" class="form-control my-1" />
+						</span>
+						<div class="text-right">
+							<button th:if="${packages.size()<=0}"
+								th:attr="onclick=|isbn('${order.bookQuantity}','${order.orderId}')|"
+								class=" my-3 btn btn-sm btn-outline-warning">Packing
+								Completed</button>
+							<button th:if="${packages.size()>0}"
+								th:attr="onclick=|edit('${order.bookQuantity}','${order.orderId}')|"
+								class=" my-3 btn btn-sm bg-fyellow text-dark">Edit
+								Information</button>
+
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		
+		
+
+
+	<script>
+		function isbn(qun,oid){
+			var dBoy=$("#dBoy").val();
+			var arr=[];
+			for (let i = 1; i <= qun; i++) {
+				var v=$("."+i).val();
+				arr.push(v);
+				if(v==""){
+					swal.fire("Fill The Data!!","","error");
+					return;
+				}
+			} 
+		
+			console.log("Array of ISBN :  "+arr);
+			$.ajax({
+				type:'POST',
+				url:'/user/savePackageDetails',
+				data:JSON.stringify({oid:oid,dBoy:dBoy,arr:arr}),
+				dataType:'json',
+				contentType:'application/json',
+				cache:'false',
+				processData:'false',
+				success:function(response){
+					console.log(response);
+					swal.fire({
+						title:"Package Information Saved!!",
+						icon:"success",
+						text:"Now order is ready to eliver the person...",
+					})
+					/* setTimeout(function(){
+					    window.location.reload();
+					}, 2560);  */
+				}
+			})
+			
+		}
+		function edit(qun,oid){
+			var dBoy=$("#dBoy").val();
+			var arr=[];
+			var ids=[];
+			for (let i = 1; i <= qun; i++) {
+				var v=$("."+i).val();
+				var id=$("#"+i).val();
+				ids.push(id);
+				arr.push(v);
+				if(v=="" || id==""){
+					swal.fire("Fill The Data!!","","error");
+					return;
+				}
+			} 
+			console.log("Array of ISBN :  "+arr);
+			$.ajax({
+				type:'POST',
+				url:'/user/editPackageDetails',
+				data:JSON.stringify({oid:oid,dBoy:dBoy,arr:arr,ids:ids}),
+				dataType:'json',
+				contentType:'application/json',
+				cache:'false',
+				processData:'false',
+				success:function(response){
+					console.log(response);
+					Swal.fire({
+						  position: 'bottom',
+						  icon: 'success',
+						  title: 'Your work has been updated',
+						  showConfirmButton: false,
+						  timer: 1500
+						})
+					setTimeout(function(){
+					    window.location.reload();
+					}, 2560); 
+				}
+			})
+		}	
+		</script>
+
+	</section>
+</body>
+</html>

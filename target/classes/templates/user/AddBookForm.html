@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="user/userPage::layout(~{::section})">
+<head>
+<meta charset="ISO-8859-1">
+<title></title>
+</head>
+<body>
+	<section>
+		<div class="mt-2 p-3 ">
+			<h5 class="text-muted my-2">ADD THE LETEST BOOK</h5>
+			<div class="fullDivider"></div>
+
+			<div class="m-md-4 card card-body addBookCard">
+				<form th:action="@{/user/do_storeBook}" method="Post"
+					enctype="multipart/form-data" th:object="${book}">
+					<!-- 2 column grid layout with text inputs for the first and last names -->
+					<div class="row mb-4">
+						<div class="col">
+							<small class=" text-small text-muted ">Enter book name </small>						
+							<div class="form-outline">
+								<input name="bookTitle" th:value="${book.bookTitle}" type="text"
+									id="form6Example1" placeholder="Enter Book Title here"
+									th:classappend="${#fields.hasErrors('bookTitle')?'is-invalid':''}"
+									class="form-control" />
+								<div th:each="e : ${#fields.errors('bookTitle')}" th:text="${e}"
+									class="invalid-feedback"></div>
+
+							</div>
+						</div>
+						<div class="col">
+							<small class=" text-small text-muted ">Enter book author </small>
+							<div class="form-outline">
+								<input name="bookAuthor" th:value="${book.bookAuthor}"
+									type="text" placeholder="Enter The Auther Name"
+									id="form6Example2" class="form-control"
+									th:classappend="${#fields.hasErrors('bookAuthor')?'is-invalid':''}" />
+								<div th:each="e : ${#fields.errors('bookAuthor')}"
+									th:text="${e}" class="invalid-feedback"></div>
+
+							</div>
+						</div>
+					</div>
+					<div class="row mb-4">
+						<div class="col">
+							<small class=" text-small text-muted ">Enter book price </small>
+							<div class="form-outline">
+								<input pattern="^[1-9]\d{0,7}(?:\.\d{1,4})?|\.\d{1,4}$"
+									name="bookPrice" th:value="${book.bookPrice}" type="text"
+									id="form6Example1" placeholder="Enter Book Price"
+									class="form-control"
+									th:classappend="${#fields.hasErrors('bookPrice')?'is-invalid':''}" />
+								<div th:each="e : ${#fields.errors('bookPrice')}" th:text="${e}"
+									class="invalid-feedback"></div>
+
+							</div>
+						</div>
+						<div class="col">
+							<small class=" text-small text-muted ">Enter book
+								discount in %</small>
+							<div class="form-outline">
+								<input pattern="^[0-9]$|^[1-9][0-9]$|^(100)$"
+									name="bookDiscount" th:value="${book.bookDiscount}"
+									placeholder="Book Discount " id="form6Example2"
+									class="form-control"
+									th:classappend="${#fields.hasErrors('bookDiscount')?'is-invalid':''}" />
+								<div th:each="e : ${#fields.errors('bookDiscount')}"
+									th:text="${e}" class="invalid-feedback"></div>
+
+							</div>
+						</div>
+					</div>
+					<!-- Text input -->
+					<div class="form-outline mb-4">
+
+						<div class="">
+							<div class="row">
+								<!-- <div class="col">
+									<div class="form-outline">
+										<input name="ISBN" th:value="${book.ISBN}"
+											placeholder="Enter Book ISBN number" id="form6Example2"
+											class="form-control"
+											th:classappend="${#fields.hasErrors('ISBN')?'is-invalid':''}" />
+										<div th:each="e : ${#fields.errors('ISBN')}"
+											th:text="${e}" class="invalid-feedback"></div>
+
+
+									</div>
+								</div> -->
+
+								<div class="col">
+									<small class=" text-small text-muted ">Select the book
+										categorys</small>
+									<div class="button-group">
+										<input name="categorys" required="required"
+											placeholder="Choose the Book categorys"
+											class="categoryInput form-control dropdown-toggle"
+											data-toggle="dropdown">
+
+										<ul class="dropdown-menu bg-light">
+											<li><a href="#" class="small" data-value="Science"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Science
+													Fiction</a></li>
+											<li><a href="#" class="small" data-value="Adventure"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Adventure</a></li>
+											<li><a href="#" class="small" data-value="History"
+												tabIndex="-1"><input type="checkbox" />&nbsp;History</a></li>
+											<li><a href="#" class="small" data-value="Action"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Action</a></li>
+											<li><a href="#" class="small" data-value="Children's"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Children's</a></li>
+											<li><a href="#" class="small" data-value="Classic"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Classic </a></li>
+											<li><a href="#" class="small" data-value="Comic book"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Comic book</a></li>
+											<li><a href="#" class="small" data-value="Crime"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Crime</a></li>
+											<li><a href="#" class="small" data-value="Drama"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Drama</a></li>
+											<li><a href="#" class="small" data-value="Novel"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Novel</a></li>
+											<li><a href="#" class="small" data-value="Suspence"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Suspense
+													and Thrillers</a></li>
+											<li><a href="#" class="small"
+												data-value="Biographies and Autobiographies" tabIndex="-1"><input
+													type="checkbox" />&nbsp;Biographies and Autobiographies</a></li>
+											<li><a href="#" class="small" data-value="Cookbooks"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Cookbooks</a></li>
+
+											<li><a href="#" class="small" data-value="Coding"
+												tabIndex="-1"><input type="checkbox" />&nbsp;Coding</a></li>
+										</ul>
+									</div>
+								</div>
+
+
+								<div class="col">
+									<small class=" text-small text-muted ">Enter the book
+										quntity</small>
+									<div class="form-outline">
+										<input pattern="^([1-9][0-9]*)$" name="bookQuantity"
+											th:value="${book.bookQuantity}"
+											placeholder="Enter Book Quantity" id="form6Example2"
+											class="form-control"
+											th:classappend="${#fields.hasErrors('bookQuantity')?'is-invalid':''}" />
+										<div th:each="e : ${#fields.errors('bookQuantity')}"
+											th:text="${e}" class="invalid-feedback"></div>
+
+
+									</div>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+
+					<!-- bookType and language  -->
+					<div class="row mb-4">
+						<div class="col">
+							<small class=" text-small text-muted ">select book
+								language</small>
+							<div class="form-outline">
+								<select class="form-control" name="bookLanguage" id="">
+									<option value="english">English</option>
+									<option value="hindi">Hindi</option>
+									<option value="marathi">Marathi</option>
+									<option value="gujrati">Gujrati</option>
+									<option value="jerman">Jerman</option>
+									<option value="spanish">Spanish</option>
+								</select>
+							</div>
+						</div>
+						<div class="col">
+							<small class=" text-small text-muted ">select book type</small>
+							<div class="form-outline">
+								<select class="form-control" name="bookType" id="">
+									<option value="new">New Book</option>
+									<option value="old">Old Book</option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<!-- Text input -->
+					<div class="form-outline mb-4">
+
+						<small class="text-small">Select Book Cover</small> <input
+							name="bookCoverImg" type="file" id="form6Example4"
+							class="form-control" />
+					</div>
+
+
+					<!-- Message input -->
+					<div class="form-outline mb-4">
+						<small class="text-small">Enter the summary of book</small>
+						<textarea name="bookDescription" th:text="${book.bookDescription}"
+							class="form-control" id="form6Example7"
+							th:classappend="${#fields.hasErrors('bookTitle')?'is-invalid':''}"
+							rows="4"></textarea>
+						<div th:each="e : ${#fields.errors('bookTitle')}" th:text="${e}"
+							class="invalid-feedback"></div>
+
+
+
+					</div>
+
+					<!-- Submit button -->
+					<button type="submit" class="btn btn-primary btn-block mb-4">Save
+						Book Details</button>
+				</form>
+
+			</div>
+		</div>
+
+
+		<!-- <script>
+			var options = [];
+
+			$('.dropdown-menu a').on(
+					'click',
+					function(event) {
+
+						var $target = $(event.currentTarget), val = $target
+								.attr('data-value'), $inp = $target
+								.find('input'), idx;
+
+						if ((idx = options.indexOf(val)) > -1) {
+							options.splice(idx, 1);
+							setTimeout(function() {
+								$inp.prop('checked', false)
+							}, 0);
+						} else {
+							options.push(val);
+							setTimeout(function() {
+								$inp.prop('checked', true)
+							}, 0);
+						}
+
+						$(event.target).blur();
+
+						console.log(options);
+						$(".categoryInput").val(options);
+
+						return false;
+					});
+		</script> -->
+
+		<script th:if="${alert.equals('saveBook')}">Swal.fire({
+			  icon:'success',
+			  title: 'Book Saved',
+			  width: 550,
+			  padding: '1em',
+			  text:"Your book has bean publish to sell. book data add successfully to your database !!",
+			  backdrop: `
+			    rgba(255,233,150,0.3)
+			  `
+			});
+		</script>
+		<script th:if="${alert.equals('priceError')}">Swal.fire({
+			  icon:'warning',
+			  width: 550,
+			  padding: '1em',
+			  text:"Book price not be 0 or book discount not be greter than 100% ",
+			  backdrop: `
+			    rgba(255,233,150,0.3)
+			  `
+			});
+		</script>
+		<script th:if="${alert.equals('bookNotSave')}">Swal.fire({
+			  icon:'error',
+			  title: 'Book Not Saved !!',
+			  width: 550,
+			  padding: '1em',
+			  text:"Your book has bean publish to sell. book data add successfully to your database !!",
+			  backdrop: `
+			    rgba(255,233,150,0.3)
+			  `
+			});
+		</script>
+
+	</section>
+</body>
+</html>

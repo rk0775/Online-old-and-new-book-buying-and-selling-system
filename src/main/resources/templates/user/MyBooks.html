@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="user/userPage::layout(~{::section})">
+<head>
+<meta charset="UTF-8" />
+<title>Document</title>
+</head>
+<body>
+	<section>
+		<div class="mt-2 p-3 ">
+			<h5 class="text-muted my-2">My Books</h5>
+			<div class="fullDivider"></div>
+
+			<nav class="navbar navbar-expand-lg navbar-light">
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item active"><a class="nav-link" href="#">All
+						</a></li>
+						<li class="nav-item"><a class="nav-link" href="#">Most
+								Rated</a></li>
+						<li class="nav-item"><a class="nav-link" href="#">Most
+								Populer</a></li>
+					</ul>
+					<form class="form-inline my-2 my-lg-0">
+						<div class="input-group mb-2">
+							<input type="text" class="form-control rounded-input"
+								id="inlineFormInputGroup" placeholder="Username">
+							<div class="input-group-append">
+								<div class="input-group-text bg-dyellow pointer"
+									style="border-radius: 25px;">
+									<i class=" fa fa-search"></i>
+								</div>
+							</div>
+						</div>
+
+					</form>
+				</div>
+			</nav>
+
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<td>#BookID</td>
+						<td>Book Name</td>
+						<td>Book Price</td>
+						<td>Remaining Quntity</td>
+						<td>Actions</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="book : ${books} ">
+						<td th:text="${book.bookId}"></td>
+						<td th:text="${book.bookTitle}"></td>
+						<td th:text="${book.bookPrice}"></td>
+						<td th:text="${book.bookQuantity}"></td>
+						<td>
+
+							<button th:attr="onclick=|viewOrderDitails('${ book.bookId }')|"
+								class="btn btn-outline-info btn-sm">
+								<i class="fa-solid fa-eye"></i>
+							</button> <a th:href="@{'/user/editBook/'+${book.bookId}+' '+${currentPage}}"
+							class="btn btn-outline-warning btn-sm"><i
+								class="fa-solid fa-pen"></i></a>
+							<button th:if="${book.sale}"
+								th:attr="onclick=| remove('${book.bookId}')|"
+								class="btn btn-outline-success btn-sm">
+								<i class="fa-solid fa-toggle-off"></i>
+							</button>
+							<button th:if="${book.sale==false}"
+								th:attr="onclick=| remove('${book.bookId}')|"
+								class="btn btn-outline-dark btn-sm">
+								<i class="fa-solid fa-toggle-on"></i>
+							</button>
+
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+
+
+
+			<!-- 		<div th:each="book : ${books} " class="mt-3">
+				<div class="alert alert-warning">
+					<div class="row">
+						<div class="col-sm-3">
+							<img style="width: 90%; height: 200px;"
+								th:src="@{'/image/webContent/BookCoverImages/'+${book.bookCover}}"
+								alt="Image not fount" />
+						</div>
+						<div class="col-sm-5">
+							<h5 class="" th:text="${book.bookTitle}"></h5>
+							<small th:text="${book.bookAuthor}"></small><br>
+							<small><b>Remaning Books : </b><span th:text="${book.bookQuantity}"></span></small>
+							<br>
+							
+							<small
+								class="text-small text-muted">Lorem ipsum dolor sit
+								amet, consectetur adipisicing elit. Aperiam id architecto
+								quibusdam.</small>
+								
+						</div>
+						<div class="col-sm-4">
+							<small>Lorem ipsum dolor sit amet, consectetur
+								adipisicing elit. Dolores tempora!</small>
+							<div class="text-right bottom">
+								<button
+									th:attr="onclick=|viewOrderDitails('${ book.bookId }')|"
+									
+									class="btn btn-outline-info">Please wait..</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div> -->
+
+			<div th:if="${totalPage==0}" class="my-5 text-center">
+				<img th:src="@{/image/webImg/noData.png}"
+					style="width: 50%; height: auto" alt=" Data Not Present Yet!!  " />
+			</div>
+			<div th:if="${totalPage!=0}" class="my-5">
+				<nav aria-label="Page navigation example ">
+					<ul class="pagination justify-content-end">
+						<li th:classappend="${ currentPage == 0 ?'disabled':'enabled' }"
+							class="page-item"><a class="page-link"
+							th:href="@{'/user/myBooks/'+${currentPage-1} }" tabindex="-1">Previous</a></li>
+						<li th:each="i : ${#numbers.sequence(1,totalPage)}"
+							class="page-item text-dark"><a class="page-link text-dark"
+							th:classappend="${ i==currentPage+1 }?'bg-dyellow' : ''"
+							th:href="@{'/user/myBooks/'+${i-1} }"><span th:text="${i}"></span></a></li>
+						<li class="page-item"
+							th:classappend="${ currentPage+1 == totalPage } ?'disabled':'enabled' ">
+							<a class="page-link"
+							th:href="@{'/user/myBooks/'+${currentPage+1} }">Next</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+
+		<script>
+			function clickOnBook(id) {
+				window.location.assign("/bookInfo/" + id);
+			}
+			function viewOrderDitails(id) {
+				window.location.assign("/user/orderBookDetails/" + id);
+
+			}
+		</script>
+
+		<script>
+			function remove(bid){
+				Swal.fire({
+					  title: 'Are you sure?',
+					  text: "Book display or hide action effect on your books!",
+					  icon: 'warning',
+					  showCancelButton: true,
+					  confirmButtonColor: '#3085d6',
+					  cancelButtonColor: '#d33',
+					  confirmButtonText: 'Yes ,Sure!'
+					}).then((result) => {
+						
+					  if (result.isConfirmed) {
+							$.ajax({
+								type:'POST',
+								url:'/user/removeBook',
+								data:JSON.stringify({bid:bid}),
+								dataType:'json',
+								contentType:'application/json',
+								cache:'false',
+								processData:'false',
+								success:function(response){
+								
+									if(response.status=='success')
+											{swal.fire({
+												text:'Changes Save Successfully',
+												position: 'bottom',
+												icon:'info',
+												showConfirmButton: false,
+												toast:true,
+												timer: 1500,
+											})
+											 setTimeout(function(){ window.location.reload() } , 1550);
+										}else if(response.status=='error')
+										{
+											swal.fire("error","Somthing Wrong","error");
+										}
+								},
+								error:function(error){
+									swal.fire("error","Somthing Wrong","error");
+									console.log("error (mybooks delete) : "+error);	
+								}
+							})
+									
+					  }
+					})
+			}
+		</script>
+	</section>
+</body>
+</html>

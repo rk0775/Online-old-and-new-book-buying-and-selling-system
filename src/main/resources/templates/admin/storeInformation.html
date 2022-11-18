@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="admin/AdminDashboard::layout(~{::section})">
+<head>
+<meta charset="UTF-8" />
+<title>Document</title>
+</head>
+<body>
+	<section>
+
+		<div class="mt-2 p-3 ">
+			<h5 class="text-muted my-2">Store Information</h5>
+			<div class="fullDivider"></div>
+
+			<div class="card mx-sm-5 my-5">
+			<div class="text-center mt-0 card-header ">
+				 	<img style="width:5%; height:auto;" th:src="@{'/image/webContent/userImages/'+${bookStore.owner.userPic}}" alt="Picture not found!!" /> 
+				 	<h4 class="text-muted" th:text="${bookStore.owner.userName}"></h4>
+				 </div>
+				<div class="row my-2 py-3 ">
+			
+				<div class="col-sm-5 pt-5  text-center">
+					<img style="width:70%; height:auto;" th:src="@{'/image/webContent/storeImages/'+${bookStore.storePic}}" alt="Picture not found!!" /> 
+					<h2 th:text="${bookStore.storeName}" class="text-Muted mt-3"></h2>
+				</div>
+				 <div class="col-sm-7 ">
+				 
+				<table class="table borderless table-stripped">
+					<tr>
+						<td>Contact : </td>
+						<td th:text="${bookStore.owner.userPhone }"></td>
+					</tr>
+					<tr>
+						<td>Voucher endDate : </td>
+						<td th:text="${bookStore.enddate}"></td>
+					</tr>
+					<tr>
+						<td>Pending money : </td>
+						<td th:text="${bookStore.placeOrderPrice}"></td>
+					</tr>
+					<tr>
+						<td>Total Earning: </td>
+						<td th:text="${bookStore.totalEarnings}"></td>
+					</tr>
+					<tr>
+						<td>District : </td>
+						<td th:text="${bookStore.storeDis}"></td>
+					</tr>
+					<tr>
+						<td>Opening time : </td>
+						<td th:text="${bookStore.storeTime}"></td>
+					</tr>
+					<tr>
+						<td>Address : </td>
+						<td th:text="${bookStore.storeAddr}"></td>
+					</tr>
+						
+				</table> 
+					<div class="text-right">
+						<a th:href="@{'/admin/stores/'+${action}+','+${page}}" class=" mx-3 btn btn-outline-dark">Back</a>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+	</section>
+</body>
+</html>
