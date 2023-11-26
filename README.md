@@ -83,7 +83,6 @@ Screenshots :
 
 If user have book store and he want publish book store online then purchase any plan and fill the information about book store .
 
-![Screenshot 2022-06-21 at 09-37-34 Screenshot](https://user-images.githubusercontent.com/118426413/202615745-7bf68287-ab11-468d-a686-a96cdf286117.png)
 
 
 Pay the plan charge to admin
