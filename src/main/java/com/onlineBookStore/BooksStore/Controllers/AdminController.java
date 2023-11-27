@@ -52,8 +52,6 @@ import com.razorpay.RazorpayClient;
 @RequestMapping("/admin")
 public class AdminController {
 	@Autowired
-	BookOrderRepository bookOrderRepository;
-	@Autowired
 	UserRepository userRepository;
 	@Autowired
 	BookRepository bookRepository;
@@ -61,24 +59,9 @@ public class AdminController {
 	BookStoreRepository bookStoreRepository;
 	User user;
 	@Autowired
-	JavaMailSender javaMailSendar;
-	@Autowired
 	FeedbackRepository feedbackRepository;
 	@Autowired
 	BCryptPasswordEncoder encPassword;
-
-	@ModelAttribute
-	public void getData(Principal p, Model model) {
-		user = userRepository.findByUserEmail(p.getName());
-		model.addAttribute("user", user);
-		// model.addAttribute("loginUser", user);
-
-	}
-
-	@RequestMapping("/dashboard")
-	public String adminDashBoard() {
-		return "/admin/adminDashboard";
-	}
 
 	@RequestMapping("/adminDashboard")
 	public String adminDashboard(Model model) {
@@ -201,7 +184,7 @@ public class AdminController {
 	public String placeTheOrderPaymentAdminToOwner(@RequestBody Map<String, Object> map) throws Exception {
 		String rzKey = map.get("key").toString();
 		int id = Integer.parseInt(map.get("id").toString().trim());
-		String rzSecret = map.get("secret").toString().trim();
+		String rzSecret = map.get("secret").toString();
 		int price = Integer.parseInt(map.get("price").toString().trim());
 		if (rzKey.equalsIgnoreCase("null") || rzSecret.equalsIgnoreCase("null") || rzKey.equalsIgnoreCase("")
 				|| rzSecret.equalsIgnoreCase("")) {
@@ -486,14 +469,12 @@ public class AdminController {
 			if (!file.isEmpty()) {
 				if (!user.getUserPic().equals("default.png")) {
 					boolean f = ImageDelete.delete("static/image/webContent/userImages", user.getUserPic());
-					if (f)
-						System.out.println("Old file deleted");
 				}
 				String fname = "User" + new Random(1000).nextInt() + file.getOriginalFilename();
 				boolean flag = ImageSaver.save(file, "static/image/webContent/userImages", fname);
 				if (flag == true)
 					System.out.println("New Image will save");
-				user.setUserPic(fname);
+				user.setUserPic(fname+"img");
 			}
 
 			// user.setUserPassword(encPassword.encode(user.getUserPassword()));
@@ -514,7 +495,6 @@ public class AdminController {
 	public String displayStore(@PathVariable("action") String str, Model model) {
 		System.out.println(str);
 		BookStore bookStore = bookStoreRepository.findByStoreId(Integer.parseInt(str.split(",")[0]));
-		model.addAttribute("bookStore", bookStore);
 		model.addAttribute("page", Integer.parseInt(str.split(",")[1]));
 		model.addAttribute("action", str.split(",")[2]);
 		return "/admin/storeInformation";
