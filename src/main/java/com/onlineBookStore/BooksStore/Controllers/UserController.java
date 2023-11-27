@@ -86,10 +86,7 @@ public class UserController {
 		Helper helper = new Helper(bookRatingRepository);
 		model.addAttribute("h", helper);
 		user = userRepository.findByUserEmail(p.getName());
-		model.addAttribute("user", user);
-		model.addAttribute("strOp", new StringOperations());
-		model.addAttribute("loginUser", user);
-		if (user.getRole().equalsIgnoreCase("ROLE_ADMIN")) {
+		if (user.getRole().equalsIgnoreCase("ROLE_NORMAL_ADMIN")) {
 			model.addAttribute("path", "/admin/adminDashboard");
 		} else
 			model.addAttribute("path", "/user/browseBooks/all,0");
@@ -277,7 +274,6 @@ public class UserController {
 	public String StoreRegistrationPanel(Model model) throws ParseException {
 		if (user.getBookStore() == null) {
 			model.addAttribute("store", "none");
-			model.addAttribute("timeMsg", "false");
 		} else if (user.getBookStore().isCheckByAdmin() && user.getBookStore().isValidity()) {
 
 			BookStore bs = user.getBookStore();
@@ -370,7 +366,6 @@ public class UserController {
 		bookStore.setValidity(true);
 		bookStore.setCheckByAdmin(false);
 		user.setBookStore(bookStore);
-		bookStore.setOwner(user);
 		userRepository.save(user);
 		// System.out.println("file " + file.getAbsolutePath());
 		System.out.println("book store deteails   " + bookStore);
@@ -649,10 +644,9 @@ public class UserController {
 			for (int i = 0; i < ids.size(); i++) {
 				String isbn = list.get(i);
 				int id = Integer.parseInt(ids.get(i));
-				System.out.println("isbn " + isbn + "    id " + id);
 				OrderPackage orderPackage = orderPackageRepository.findByOrderPackageId(id);
 				orderPackage.setBookIsbnNumber(isbn);
-				orderPackage.setDeliveryPerson(map.get("dBoy").toString().trim());
+				orderPackage.setDeliveryPerson(map.get("dBoyz").toString().trim());
 				orderPackageRepository.save(orderPackage);
 			}
 		return new JSONObject().put("status", "success").toString();
@@ -908,7 +902,7 @@ public class UserController {
 
 	@PostMapping("/do_editBookInfo")
 	public String editUser(@Valid @ModelAttribute("book") Book book, BindingResult result, Model model,
-			@RequestParam("bookpicture") MultipartFile file, @RequestParam("categorys") String categorys,
+			@RequestParam("bookpicture") MultipartFile file, @RequestParam("cat") String categorys,
 			@RequestParam("page") String page, HttpSession session) {
 		Book b = bookRepository.findByBookId(book.getBookId());
 		try {
@@ -1071,7 +1065,6 @@ public class UserController {
 		}
 		feedback.setFpuser(user);
 		feedback.setDate(LocalDate.now());
-		feedbackRepository.save(feedback);
 		model.addAttribute("alert", "success");
 
 		Pageable pageable = PageRequest.of(page, 10, Sort.by("date").ascending());
