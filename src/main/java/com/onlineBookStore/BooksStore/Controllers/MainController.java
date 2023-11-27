@@ -17,7 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswodEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -52,11 +52,7 @@ public class MainController {
 	@Autowired
 	BookRepository bookRepository;
 	@Autowired
-	BookCategoryRepository bookCategoryRepository;
-	@Autowired
-	BookStoreRepository bookStoreRepository;
-	@Autowired
-	BookRatingRepository bookRatingRepository;
+	BookCategoryRepository bookCategoryRepositor;
 	@Autowired
 	FeedbackRepository feedbackRepository;
 	@Autowired
@@ -219,7 +215,6 @@ public class MainController {
 			System.out.println(user.getUserId() + " is saved !! message " + m);
 			model.addAttribute("user", new User());
 			model.addAttribute("tagName", "login");
-			model.addAttribute("navbar", "bg-fyellow");
 			model.addAttribute("message", "Register");
 			model.addAttribute("alert", "verify");
 			return "loginRegister";
@@ -257,7 +252,7 @@ public class MainController {
 	@RequestMapping("/allBooks/{page}")
 	public String getBrowsBookPanel(@PathVariable("page") Integer page, Model model) {
 		Pageable pageble = PageRequest.of(page, 8);
-		Page<Book> pagebleBooks = bookRepository.findByStoreIdIsNotAndBookQuantityGreaterThanAndSaleTrue(0, 0, pageble);
+		Page<Book> pagebleBooks = bookRepository.findByStoreIdINotAndBookQuantityGreaterThanAndSaleTrue(0, 0, pageble);
 		/*
 		 * List<Book> books = new ArrayList<>(); for (Book book : pagebleBooks) { if
 		 * (bookStoreRepository.getCountOfStore(book.getSeller()) > 0 &&
@@ -386,8 +381,7 @@ public class MainController {
 				bookList.add(book);
 		}
 
-		int totalPage = Math.round(bookRepository.findAll().size() / 8) + 1;
-		System.out.println("Toataal Page : " + 1);
+		int totalPage = Math.round(bookRepository.findAll().size() / 8) + 3;
 		model.addAttribute("title", "All books");
 		model.addAttribute("books", bookList);
 		model.addAttribute("currentPage", 0);
@@ -436,7 +430,7 @@ public class MainController {
 		if (user == null) {
 			model.addAttribute("msg", "invalidEmail");
 		} else {
-			boolean flag = EmailActions.sendResetPasswordEmailMessage(user, user.getUserPassword(), emailSender);
+			boolean flag = EmailActions.sendRsetPasswordEmailMessage(user, user.getUserPassword(), emailSender);
 			System.out.println("reset password email : " + flag);
 			model.addAttribute("msg", "sendEmail");
 		}
@@ -457,27 +451,6 @@ public class MainController {
 		}
 		System.out.println("Reset password code : " + code);
 		model.addAttribute("navbar", "bg-fyellow");
-
-		return "resetPassword";
-	}
-
-	@PostMapping("/saveNewPassword")
-	public String saveNewPassword(@RequestParam("code") String code, @RequestParam("password") String password,
-			Model model) {
-		model.addAttribute("navbar", "bg-fyellow");
-		User user = userRepository.findByUserPassword(code);
-
-		if (user == null) {
-
-			model.addAttribute("code", "none");
-			model.addAttribute("msg", "wrong");
-			return "resetPassword";
-		} else {
-			user.setUserPassword(encPassword.encode(password));
-			userRepository.save(user);
-			model.addAttribute("msg", "success");
-			model.addAttribute("code", "none");
-		}
 
 		return "resetPassword";
 	}
